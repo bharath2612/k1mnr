@@ -68,6 +68,9 @@
   --ember:#C9A24B;
   --ember-hot:#E2C57F;
   --rust:#8A6A2B;
+  --pine:#122A1E;
+  --pine-2:#183627;
+  --pine-line:rgba(58,110,82,.35);
   --smoke:#9B968C;
   --smoke-dark:#6B675F;
   --display:"Anton",Impact,sans-serif;
@@ -299,7 +302,7 @@ body::before{
   color:var(--carbon);border:1px solid rgba(18,17,16,.3);
   padding:9px 15px;transition:background .3s,color .3s;
 }
-.values li:hover{background:var(--carbon);color:var(--ember-hot)}
+.values li:hover{background:var(--pine);color:var(--ember-hot);border-color:var(--pine)}
 @media(max-width:960px){.about-grid{grid-template-columns:1fr;gap:56px}}
 
 /* ============ PRODUCTS (dark) ============ */
@@ -310,7 +313,7 @@ body::before{
   background:var(--carbon);padding:40px 38px 36px;position:relative;overflow:hidden;
   transition:background .4s;
 }
-.product-card:hover{background:var(--carbon-2)}
+.product-card:hover{background:var(--pine)}
 .product-card::after{
   content:"";position:absolute;left:0;bottom:0;width:100%;height:3px;
   background:var(--ember);transform:scaleX(0);transform-origin:left;
@@ -345,7 +348,7 @@ body::before{
 }
 .band::after{
   content:"";position:absolute;inset:0;
-  background:linear-gradient(90deg,rgba(18,17,16,.88) 0%,rgba(18,17,16,.45) 60%,rgba(18,17,16,.2) 100%);
+  background:linear-gradient(90deg,rgba(12,28,20,.9) 0%,rgba(14,26,20,.5) 60%,rgba(18,17,16,.25) 100%);
 }
 .band-inner{position:relative;z-index:2;padding:90px 0}
 .band h2{font-size:clamp(30px,4.1vw,58px);max-width:16ch}
@@ -362,7 +365,7 @@ body::before{
   border-right:1px solid var(--paper-line);border-bottom:1px solid var(--paper-line);
   padding:40px 32px 36px;position:relative;transition:background .35s;
 }
-.ind-cell:hover{background:rgba(199,80,31,.06)}
+.ind-cell:hover{background:rgba(18,42,30,.07)}
 .ind-cell i{
   font-family:var(--mono);font-style:normal;font-size:10.5px;letter-spacing:.16em;
   color:#8A8474;display:block;margin-bottom:34px;
@@ -399,7 +402,7 @@ body::before{
   font-family:var(--mono);font-size:12px;font-weight:500;letter-spacing:.1em;
   color:var(--ember-hot);
 }
-.svc-item:hover{background:var(--carbon-2);padding-left:20px}
+.svc-item:hover{background:var(--pine);padding-left:20px}
 .svc-item h3{
   font-size:15.5px;font-weight:500;color:var(--bone);
   letter-spacing:.04em;text-transform:uppercase;
@@ -433,7 +436,7 @@ body::before{
 }
 .why::after{
   content:"";position:absolute;inset:0;
-  background:linear-gradient(180deg,rgba(18,17,16,.92),rgba(18,17,16,.72) 50%,rgba(18,17,16,.94));
+  background:linear-gradient(180deg,rgba(13,27,20,.93),rgba(14,24,19,.75) 50%,rgba(12,26,19,.95));
 }
 .why-grid{display:grid;grid-template-columns:1fr 1fr;gap:80px;position:relative;z-index:2;align-items:start}
 .why-grid>*{min-width:0}
@@ -447,8 +450,8 @@ body::before{
 .why-list li::before{content:"▪";font-size:9px;color:var(--ember);flex:none}
 .twin-cards{display:grid;gap:22px}
 .twin{
-  border:1px solid var(--steel);padding:36px 34px;
-  background:rgba(18,17,16,.68);backdrop-filter:blur(4px);
+  border:1px solid var(--pine-line);padding:36px 34px;
+  background:rgba(14,32,23,.72);backdrop-filter:blur(4px);
   transition:border-color .35s;
 }
 .twin:hover{border-color:var(--ember)}
@@ -466,18 +469,19 @@ body::before{
 @media(max-width:960px){.why-grid{grid-template-columns:1fr;gap:56px}}
 
 /* ============ CTA STRIP ============ */
-.cta-strip{background:var(--ember);color:var(--carbon);padding:60px 0;position:relative;overflow:hidden}
+.cta-strip{background:var(--pine);color:var(--bone);padding:60px 0;position:relative;overflow:hidden;border-top:1px solid var(--pine-line);border-bottom:1px solid var(--pine-line)}
 .cta-strip::before{
-  content:"";position:absolute;top:0;bottom:0;right:-60px;width:280px;opacity:.16;
-  background:repeating-linear-gradient(-45deg,transparent 0 22px,var(--carbon) 22px 44px);
+  content:"";position:absolute;top:0;bottom:0;right:-60px;width:280px;opacity:.14;
+  background:repeating-linear-gradient(-45deg,transparent 0 22px,var(--ember) 22px 44px);
 }
+.cta-inner h2 .x{color:var(--ember)}
 .cta-inner{display:flex;align-items:center;justify-content:space-between;gap:40px;flex-wrap:wrap;position:relative;z-index:2}
 .cta-inner h2{
   font-family:var(--display);font-weight:400;text-transform:uppercase;
   font-size:clamp(27px,3.6vw,49px);line-height:.98;max-width:20ch;
 }
-.btn-carbon{background:var(--carbon);color:var(--bone)}
-.btn-carbon:hover{background:#000;transform:translateY(-2px)}
+.btn-carbon{background:var(--ember);color:var(--carbon)}
+.btn-carbon:hover{background:var(--ember-hot);transform:translateY(-2px)}
 
 /* ============ CONTACT (dark) ============ */
 .contact{padding:116px 0 90px;background:var(--carbon)}
@@ -500,7 +504,7 @@ body::before{
 .c-wa:hover{border-color:var(--ember);color:var(--ember-hot);transform:translateY(-2px)}
 .c-wa svg{fill:var(--ember-hot)}
 /* connect card */
-.connect-card{background:var(--carbon-2);border:1px solid var(--steel);padding:43px 41px}
+.connect-card{background:var(--pine);border:1px solid var(--pine-line);padding:43px 41px}
 .connect-card h3{
   font-family:var(--display);font-weight:400;text-transform:uppercase;
   font-size:25px;letter-spacing:.02em;margin-bottom:6px;
@@ -520,7 +524,7 @@ body::before{
   font-size:15px;font-weight:400;color:var(--bone);letter-spacing:.02em;
 }
 .connect-row svg{color:var(--smoke-dark);transition:transform .3s var(--ease),color .3s}
-.connect-row:hover{background:var(--carbon-3);padding-left:16px}
+.connect-row:hover{background:var(--pine-2);padding-left:16px}
 .connect-row:hover svg{transform:translateX(5px);color:var(--ember-hot)}
 .form-note{font-family:var(--mono);font-size:10.5px;color:var(--smoke-dark);margin-top:20px;line-height:1.7}
 @media(max-width:960px){
@@ -562,7 +566,7 @@ footer{background:#0B0A09;color:var(--smoke-dark);padding:76px 0 38px;border-top
 .wa-float{
   position:fixed;right:24px;bottom:24px;z-index:1200;
   width:54px;height:54px;
-  background:var(--carbon-3);border:1px solid var(--steel);
+  background:var(--pine);border:1px solid var(--pine-line);
   display:grid;place-items:center;
   box-shadow:0 12px 30px -8px rgba(0,0,0,.6);
   transition:transform .3s var(--ease),border-color .3s;
