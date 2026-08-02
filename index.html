@@ -65,9 +65,9 @@
   --bone:#E8E2D6;
   --bone-2:#DED7C8;
   --paper-line:rgba(18,17,16,.14);
-  --ember:#C7501F;
-  --ember-hot:#E06A2E;
-  --rust:#8A4A2B;
+  --ember:#C9A24B;
+  --ember-hot:#E2C57F;
+  --rust:#8A6A2B;
   --smoke:#9B968C;
   --smoke-dark:#6B675F;
   --display:"Anton",Impact,sans-serif;
@@ -145,12 +145,7 @@ body::before{
 }
 .nav-inner{display:flex;align-items:center;justify-content:space-between;gap:24px}
 .brand{display:flex;align-items:center;gap:14px}
-.brand-mark{
-  width:40px;height:40px;flex:none;background:var(--ember);
-  display:grid;place-items:center;
-  font-family:var(--display);font-size:16px;color:var(--carbon);
-  letter-spacing:.02em;
-}
+.brand-logo{width:44px;height:44px;flex:none;border-radius:50%;display:block}
 .brand-name{display:flex;flex-direction:column;line-height:1.3}
 .brand-name b{
   font-family:var(--mono);font-weight:600;font-size:12.5px;
@@ -589,7 +584,7 @@ footer{background:#0B0A09;color:var(--smoke-dark);padding:76px 0 38px;border-top
 <header class="nav" id="nav">
   <div class="container nav-inner">
     <a class="brand" href="#top" aria-label="K One Minerals home">
-      <span class="brand-mark">K1</span>
+      <img class="brand-logo" src="assets/logo.png" alt="K One Minerals logo">
       <span class="brand-name">
         <b>K One Minerals</b>
         <span>&amp; Natural Resources LLP</span>
@@ -886,7 +881,7 @@ footer{background:#0B0A09;color:var(--smoke-dark);padding:76px 0 38px;border-top
     <div class="foot-grid">
       <div class="foot-brand">
         <a class="brand" href="#top">
-          <span class="brand-mark">K1</span>
+          <img class="brand-logo" src="assets/logo.png" alt="K One Minerals logo">
           <span class="brand-name"><b>K One Minerals</b><span>&amp; Natural Resources LLP</span></span>
         </a>
         <p>A professionally managed procurement and commodity trading company — sourcing and supplying minerals, industrial raw materials and energy resources with integrity.</p>
