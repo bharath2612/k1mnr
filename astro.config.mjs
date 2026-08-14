@@ -31,15 +31,23 @@ export default defineConfig({
 
   vite: {
     ssr: {
-      // sanitize-html is CommonJS and calls require() at module scope. If the
-      // SSR bundler ever transforms it into ESM, that require() becomes
-      // "ReferenceError: require is not defined" and every route that renders
-      // markdown 500s at module load — post pages, the RSS feed and the studio
-      // render endpoint — while routes that don't touch markdown keep working.
+      // Bundle the markdown stack into the server output so it does not depend
+      // on Vercel's file tracing shipping every transitive package (it missed
+      // dequal and mdast-util-to-hast).
       //
-      // Marking it external pins the behaviour: Node loads it as CommonJS.
-      // Do not move this to noExternal; bundling it reproduces the fault.
-      external: ['sanitize-html'],
+      // This is only safe because every one of these is pure ESM. The previous
+      // sanitizer, sanitize-html, was CommonJS: bundling it rewrote its
+      // module-scope require() into ESM and produced
+      // "ReferenceError: require is not defined" at module load, taking down
+      // every route that rendered markdown. Do not add a CommonJS package here.
+      noExternal: [
+        'marked',
+        'unified',
+        'rehype-parse',
+        'rehype-sanitize',
+        'rehype-stringify',
+        'unist-util-visit',
+      ],
     },
   },
 

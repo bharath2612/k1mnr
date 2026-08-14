@@ -1,22 +1,26 @@
 /**
- * Build-time guard against the failure that took the blog down in production.
+ * Build-time smoke test of the deployed serverless bundle.
  *
- * Vercel bundles each serverless function with only the files its tracer could
- * discover. Tracing missed three of sanitize-html's transitive CommonJS
- * dependencies, so every route that rendered markdown died at runtime with
- * FUNCTION_INVOCATION_FAILED while routes that didn't render markdown were
- * completely fine — which is what made it look like a save bug rather than a
- * bundling bug.
+ * This exists because of a real outage. Every route that rendered markdown
+ * returned 500 on Vercel while every route that didn't was fine. The cause was
+ * a module-load failure: sanitize-html is CommonJS and calls require() at
+ * module scope, and once the SSR bundler touched it that became
+ * "ReferenceError: require is not defined". Nothing in `astro build`,
+ * `astro check` or the Playwright suite caught it, because locally the module
+ * resolved from the project's own node_modules and loaded fine.
  *
- * The fix bundles that dependency closure into the server output. This script
- * verifies the result: every runtime require()/import of a bare package
- * specifier left in the server chunks must actually be present in the
- * function's traced node_modules. If it isn't, the build fails here instead of
- * at 3am in production.
+ * A static scan of import specifiers was tried first and produced constant
+ * false positives (JSDoc comments, type-only @types packages, optional deps
+ * that are never required at runtime). So instead of guessing, this copies the
+ * built function OUT of the repo — where the project's node_modules is no
+ * longer reachable, exactly like Vercel — and actually imports every emitted
+ * server chunk. Anything that cannot initialise fails the build here rather
+ * than in production.
  */
-import { readdirSync, readFileSync, statSync, existsSync } from 'node:fs';
-import { join } from 'node:path';
-import { isBuiltin } from 'node:module';
+import { cpSync, existsSync, mkdtempSync, readdirSync, readFileSync, rmSync } from 'node:fs';
+import { join, resolve } from 'node:path';
+import { tmpdir } from 'node:os';
+import { pathToFileURL } from 'node:url';
 
 const FUNCTIONS_DIR = '.vercel/output/functions';
 
@@ -25,109 +29,66 @@ if (!existsSync(FUNCTIONS_DIR)) {
   process.exit(0);
 }
 
-/** Bare specifiers in `require("x")` and `from "x"` / `import("x")`. */
-function bareSpecifiers(src) {
-  const found = new Set();
-  const patterns = [
-    /require\(\s*["']([^"'.][^"']*)["']\s*\)/g,
-    /\bfrom\s*["']([^"'.][^"']*)["']/g,
-    /\bimport\(\s*["']([^"'.][^"']*)["']\s*\)/g,
-  ];
-  for (const re of patterns) {
-    let m;
-    while ((m = re.exec(src))) found.add(m[1]);
+// The chunks read configuration through astro:env at module scope, so the
+// same variables the build used have to be present here too.
+if (existsSync('.env')) {
+  for (const line of readFileSync('.env', 'utf8').split('\n')) {
+    const m = line.match(/^\s*([A-Z0-9_]+)\s*=\s*"?(.*?)"?\s*$/);
+    if (m && !process.env[m[1]]) process.env[m[1]] = m[2];
   }
-  return found;
 }
 
-/** "@scope/pkg/sub" -> "@scope/pkg";  "pkg/sub" -> "pkg" */
-function packageName(spec) {
-  const parts = spec.split('/');
-  return spec.startsWith('@') ? parts.slice(0, 2).join('/') : parts[0];
-}
-
-/**
- * Minified bundles contain plenty of text that superficially looks like an
- * import, so anything that is not a syntactically valid npm package name is
- * discarded rather than reported.
- */
-const VALID_PACKAGE = /^(?:@[a-z0-9][\w.-]*\/)?[a-z0-9][\w.-]*$/;
-
-function walk(dir, out = []) {
-  for (const entry of readdirSync(dir)) {
-    const p = join(dir, entry);
-    if (entry === 'node_modules') continue;
-    if (statSync(p).isDirectory()) walk(p, out);
-    else if (p.endsWith('.mjs') || p.endsWith('.js')) out.push(p);
-  }
-  return out;
-}
-
+const staging = mkdtempSync(join(tmpdir(), 'k1mnr-bundle-'));
 let failed = false;
 
-for (const fn of readdirSync(FUNCTIONS_DIR)) {
-  if (!fn.endsWith('.func')) continue;
-  const root = join(FUNCTIONS_DIR, fn);
-  const nodeModules = join(root, 'node_modules');
+try {
+  for (const fn of readdirSync(FUNCTIONS_DIR)) {
+    if (!fn.endsWith('.func')) continue;
 
-  const missing = new Set();
-  for (const file of walk(root)) {
-    for (const spec of bareSpecifiers(readFileSync(file, 'utf8'))) {
-      if (isBuiltin(spec) || spec.startsWith('node:')) continue;
-      const pkg = packageName(spec);
-      if (!VALID_PACKAGE.test(pkg)) continue;
-      if (!existsSync(join(nodeModules, pkg))) missing.add(pkg);
-    }
-  }
+    const src = join(FUNCTIONS_DIR, fn);
+    const dest = join(staging, fn);
+    cpSync(src, dest, { recursive: true });
 
-  // The emitted chunks are only half the story. The original outage was caused
-  // by a package that WAS traced (sanitize-html) whose own dependencies were
-  // NOT — the failing require lived inside node_modules, where the scan above
-  // never looks. So also assert the traced tree is internally closed.
-  if (existsSync(nodeModules)) {
-    const pkgDirs = [];
-    for (const entry of readdirSync(nodeModules)) {
-      if (entry.startsWith('@')) {
-        for (const sub of readdirSync(join(nodeModules, entry))) {
-          pkgDirs.push(join(nodeModules, entry, sub));
-        }
-      } else {
-        pkgDirs.push(join(nodeModules, entry));
-      }
-    }
+    const chunksDir = join(dest, 'dist/server/chunks');
+    if (!existsSync(chunksDir)) continue;
 
-    for (const dir of pkgDirs) {
-      const manifest = join(dir, 'package.json');
-      if (!existsSync(manifest)) continue;
-      let deps;
+    const broken = [];
+    for (const file of readdirSync(chunksDir)) {
+      if (!file.endsWith('.mjs')) continue;
       try {
-        deps = Object.keys(JSON.parse(readFileSync(manifest, 'utf8')).dependencies ?? {});
-      } catch {
-        continue;
-      }
-      for (const dep of deps) {
-        if (isBuiltin(dep)) continue;
-        // Either hoisted at the function root, or nested beside its dependent.
-        if (existsSync(join(nodeModules, dep)) || existsSync(join(dir, 'node_modules', dep))) {
-          continue;
+        await import(pathToFileURL(resolve(chunksDir, file)).href);
+      } catch (err) {
+        // Only module-resolution / initialisation faults matter here. A chunk
+        // throwing for want of a request context is expected and harmless.
+        const msg = String(err?.message ?? err);
+        if (
+          msg.includes('Cannot find module') ||
+          msg.includes('Cannot find package') ||
+          msg.includes('require is not defined') ||
+          err instanceof ReferenceError
+        ) {
+          broken.push(`${file}: ${msg.split('\n')[0]}`);
         }
-        missing.add(`${dep}  (required by ${dir.slice(nodeModules.length + 1)})`);
       }
     }
-  }
 
-  if (missing.size) {
-    failed = true;
-    console.error(`\ncheck:bundle FAILED — ${fn} references packages absent from its bundle:\n`);
-    for (const p of [...missing].sort()) console.error(`   ${p}`);
-    console.error(
-      '\nThese would throw at runtime on Vercel. Add them (and their own\n' +
-        'dependencies) to vite.ssr.noExternal in astro.config.mjs so they are\n' +
-        'bundled rather than resolved from node_modules.\n',
-    );
-  } else {
-    console.log(`check:bundle passed — ${fn}: every external specifier is present.`);
+    if (broken.length) {
+      failed = true;
+      console.error(`\ncheck:bundle FAILED — ${fn}: chunks cannot load outside the repo:\n`);
+      for (const b of broken) console.error(`   ${b}`);
+      console.error(
+        '\nThese will throw at module load on Vercel, which surfaces as a 500\n' +
+          'on every route importing them (and, tellingly, a 500 rather than a\n' +
+          '401 on authenticated API routes).\n' +
+          '\nUsual cause: a CommonJS dependency got bundled as ESM. Mark it\n' +
+          'external, or replace it with an ESM-native equivalent.\n',
+      );
+    } else {
+      console.log(`check:bundle passed — ${fn}: all server chunks load in isolation.`);
+    }
   }
+} finally {
+  rmSync(staging, { recursive: true, force: true });
 }
 
 process.exit(failed ? 1 : 0);
