@@ -1,7 +1,6 @@
 // @ts-check
 import { defineConfig, envField } from 'astro/config';
 import vercel from '@astrojs/vercel';
-
 // https://astro.build/config
 export default defineConfig({
   site: 'https://k1mnr.com',
@@ -29,6 +28,20 @@ export default defineConfig({
     },
     skewProtection: true,
   }),
+
+  vite: {
+    ssr: {
+      // sanitize-html is CommonJS and calls require() at module scope. If the
+      // SSR bundler ever transforms it into ESM, that require() becomes
+      // "ReferenceError: require is not defined" and every route that renders
+      // markdown 500s at module load — post pages, the RSS feed and the studio
+      // render endpoint — while routes that don't touch markdown keep working.
+      //
+      // Marking it external pins the behaviour: Node loads it as CommonJS.
+      // Do not move this to noExternal; bundling it reproduces the fault.
+      external: ['sanitize-html'],
+    },
+  },
 
   env: {
     schema: {

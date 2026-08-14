@@ -1,7 +1,7 @@
 import type { APIRoute } from 'astro';
 import { isAuthed, unauthorized } from '../../../lib/server/session';
 import { json, studioContext, POSTS } from '../../../lib/server/studio';
-import { readingMinutes, slugify } from '../../../lib/markdown';
+import { readingMinutes, slugify } from '../../../lib/text';
 
 export const prerender = false;
 

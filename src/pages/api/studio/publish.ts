@@ -1,7 +1,7 @@
 import type { APIRoute } from 'astro';
 import { isAuthed, unauthorized } from '../../../lib/server/session';
 import { json, studioContext, audit, purgeIsr, POSTS } from '../../../lib/server/studio';
-import { readingMinutes } from '../../../lib/markdown';
+import { readingMinutes } from '../../../lib/text';
 import { VERCEL_BYPASS_TOKEN } from 'astro:env/server';
 
 export const prerender = false;

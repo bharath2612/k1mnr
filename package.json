@@ -5,12 +5,13 @@
   "private": true,
   "scripts": {
     "dev": "astro dev",
-    "build": "astro build && npm run check:secrets",
+    "build": "astro build && npm run check:secrets && npm run check:bundle",
     "preview": "astro preview",
     "check": "astro check",
     "check:secrets": "node scripts/check-secrets.mjs",
     "diff:visual": "node scripts/visual-diff.mjs",
-    "test": "playwright test"
+    "test": "playwright test",
+    "check:bundle": "node scripts/check-bundle.mjs"
   },
   "dependencies": {
     "@astrojs/rss": "^4.0.19",
