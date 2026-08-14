@@ -74,14 +74,22 @@ openssl rand -base64 32   # STUDIO_SECRET
 | `npm test` | Playwright smoke + auth suite |
 | `npm run diff:visual` | Pixel-diff `/` against live k1mnr.com |
 
-### The visual diff gate
+### The visual diff gate (historical)
 
-`scripts/visual-diff.mjs` screenshots the live site against the local build at
-390 / 820 / 1080 / 1440 px and fails over a 0.1% pixel delta. It exists because
-the entire original site was one hand-tuned `index.html`, and this converts "I
-think the port is faithful" into a check. The nav is masked (it gained a tab)
-and the footer is legitimately ~38px taller (it gained a link), so the script
-compares the aligned region above it.
+`scripts/visual-diff.mjs` screenshots a reference URL against the local build at
+390 / 820 / 1080 / 1440 px and fails over a 0.1% pixel delta. It existed to
+prove one thing: that porting the hand-tuned `index.html` into Astro changed
+nothing. It did that job — the port passed at 0.02–0.07%, pure antialiasing.
+
+It is **not currently runnable**: its reference was the GitHub Pages site at
+k1mnr.com, which has been retired, and the typeface has since deliberately
+changed to Plus Jakarta Sans, so a pixel comparison against the old design
+would fail by design. Keep it for the next structural refactor, pointing
+`LIVE_URL` at a known-good deployment first:
+
+```bash
+LIVE_URL=https://k1mnr.vercel.app LOCAL_URL=http://localhost:4321 npm run diff:visual
+```
 
 ```bash
 npm run build && npm run preview &

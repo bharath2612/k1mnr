@@ -17,8 +17,13 @@
   --silver-dim:#878D83;
   --ink:#111C16;
   --ink-2:#3F4A43;
-  --serif:"Newsreader",Georgia,"Times New Roman",serif;
-  --sans:"Archivo",Helvetica,Arial,sans-serif;
+  /* Plus Jakarta Sans throughout. The two names are kept because dozens of
+     rules reference them: --serif is the display role (headings, the italic
+     gold accents) and --sans the text role. Both now resolve to the same
+     family, so weight and italic carry the distinction instead of a
+     typeface contrast. */
+  --serif:"Plus Jakarta Sans",ui-sans-serif,system-ui,sans-serif;
+  --sans:"Plus Jakarta Sans",ui-sans-serif,system-ui,sans-serif;
   --ease:cubic-bezier(.22,.61,.24,1);
 }
 *{margin:0;padding:0;box-sizing:border-box}
