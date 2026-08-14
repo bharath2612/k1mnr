@@ -157,8 +157,17 @@ test('unpublishing removes it from the site again', async ({ request }) => {
   expect(await (await request.get('/sitemap.xml')).text()).not.toContain(slug);
 });
 
-test('cleans up', async ({ request }) => {
+test('delete is a soft delete and removes the post from the studio list', async ({ request }) => {
   await request.post('/api/studio/login', { data: { passcode: PASSCODE } });
+
   const res = await request.post('/api/studio/delete', { data: { id: postId } });
   expect(res.ok()).toBeTruthy();
+  expect((await res.json()).softDeleted).toBe(true);
+
+  // Gone from the studio listing...
+  const list = await (await request.get('/api/studio/list')).json();
+  expect(list.posts.some((p: { id: string }) => p.id === postId)).toBe(false);
+
+  // ...and no longer openable in the editor.
+  expect((await request.get(`/api/studio/post?id=${postId}`)).status()).toBe(404);
 });

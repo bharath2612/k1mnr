@@ -12,7 +12,12 @@ export const GET: APIRoute = async ({ request, url, cookies }) => {
   if (!id) return json({ error: 'Missing id.' }, 400);
 
   const { db } = await studioContext(request);
-  const { data, error } = await db.from(POSTS).select('*').eq('id', id).maybeSingle();
+  const { data, error } = await db
+    .from(POSTS)
+    .select('*')
+    .eq('id', id)
+    .is('deleted_at', null)
+    .maybeSingle();
 
   if (error) return json({ error: error.message }, 500);
   if (!data) return json({ error: 'Not found.' }, 404);

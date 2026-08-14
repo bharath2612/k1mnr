@@ -14,12 +14,7 @@ Astro.response.headers.set('cache-control', 'no-store, private');
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<Seo
-  title="Studio — K One Minerals"
-  description="Internal authoring tool."
-  path="/studio"
-  noindex
-/>
+<Seo title="Studio — K One Minerals" description="Internal authoring tool." path="/studio" noindex />
 <link rel="icon" type="image/png" sizes="32x32" href="/assets/favicon-32.png">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -38,138 +33,180 @@ Astro.response.headers.set('cache-control', 'no-store, private');
       <label for="passcode">Passcode</label>
       <input type="password" id="passcode" autocomplete="current-password" required autofocus>
     </div>
-    <div class="editor-actions" style="border:none;padding:0;margin-top:22px">
-      <button class="sbtn primary" type="submit" id="gateSubmit">Enter Studio</button>
-    </div>
+    <button class="sbtn primary" type="submit" id="gateSubmit" style="width:100%;justify-content:center">Enter Studio</button>
   </form>
 </div>
 
 <!-- ================= APP ================= -->
 <div class="studio" id="app">
-  <header class="studio-bar">
+  <header class="topbar">
     <img class="brand-logo" src="/assets/logo.png" alt="">
     <h1>Insights Studio</h1>
-    <span class="pill" id="statusPill">Draft</span>
     <span class="spacer"></span>
-    <span class="save-state" id="saveState" data-state="idle"><span class="pip"></span><span id="saveText">Ready</span></span>
-    <button class="sbtn" id="newPost">New post</button>
-    <button class="sbtn" id="logout">Sign out</button>
+    <button class="sbtn ghost" id="logout">Sign out</button>
   </header>
 
-  <div class="studio-main">
-    <!-- ---------- post list ---------- -->
-    <aside class="pane-list">
-      <h2>All posts</h2>
-      <div id="postList"></div>
-    </aside>
-
-    <!-- ---------- editor ---------- -->
-    <section class="pane-edit">
-      <p class="pane-label">Editor</p>
-      <div class="alert" id="editorError" hidden></div>
-
-      <div class="field">
-        <label for="title">Title</label>
-        <input type="text" id="title" maxlength="160" placeholder="India's coal import outlook for 2026">
-      </div>
-
-      <div class="field">
-        <label for="slug">URL slug</label>
-        <div class="slug-row">
-          <span class="prefix">k1mnr.com/insights/</span>
-          <input type="text" id="slug" maxlength="96" placeholder="india-coal-import-outlook-2026">
+  <!-- ---------------- LIST VIEW ---------------- -->
+  <section class="view on" id="listView">
+    <div class="list-wrap">
+      <div class="list-head">
+        <div>
+          <h2>Industry Insights</h2>
+          <p id="listSummary">Loading…</p>
         </div>
-        <p class="field-hint" id="slugHint">Lowercase letters, numbers and hyphens. Auto-filled from the title.</p>
+        <button class="sbtn gold" id="newPost">
+          <svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.6"><path d="M8 3v10M3 8h10"/></svg>
+          New blog
+        </button>
       </div>
 
-      <div class="field">
-        <label for="excerpt">Excerpt <span class="field-count" id="excerptCount">0/320</span></label>
-        <textarea id="excerpt" rows="3" maxlength="320" placeholder="One or two sentences. Used on the listing card and as the meta description."></textarea>
-      </div>
-
-      <div class="field">
-        <label>Cover image</label>
-        <div class="cover-drop" id="coverDrop">
-          <p>Drop an image here, or click to choose.<br>JPG, PNG, WebP or AVIF — up to 5 MB.</p>
+      <div class="list-controls">
+        <div class="search">
+          <svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.6"><circle cx="7" cy="7" r="4.5"/><path d="M10.5 10.5 14 14"/></svg>
+          <input type="search" id="search" placeholder="Search by title, excerpt or tag…" autocomplete="off">
         </div>
-        <input type="file" id="coverFile" accept="image/jpeg,image/png,image/webp,image/avif" hidden>
-        <div class="cover-preview" id="coverPreview" hidden>
-          <img id="coverImg" alt="">
-          <button class="sbtn danger rm" type="button" id="coverRemove">Remove</button>
+        <div class="filters" id="filters" role="tablist">
+          <button data-filter="all" class="on" role="tab">All <span class="n" id="cAll">0</span></button>
+          <button data-filter="published" role="tab">Published <span class="n" id="cPub">0</span></button>
+          <button data-filter="draft" role="tab">Drafts <span class="n" id="cDraft">0</span></button>
         </div>
       </div>
 
-      <div class="field" id="coverAltField" hidden>
-        <label for="coverAlt">Cover alt text <span class="field-hint" style="display:inline;margin:0">required</span></label>
-        <input type="text" id="coverAlt" maxlength="200" placeholder="Describe the image for screen readers and search engines.">
-      </div>
+      <div class="cards" id="cards"></div>
 
-      <div class="field">
-        <label for="tagField">Tags</label>
-        <div class="tag-input" id="tagInput">
-          <input type="text" id="tagField" placeholder="Type a tag, press Enter">
-        </div>
+      <div class="empty-state" id="emptyState" hidden>
+        <h3 id="emptyTitle">No posts yet</h3>
+        <p id="emptyBody">Write the first Industry Insights piece.</p>
+        <button class="sbtn gold" id="emptyNew">New blog</button>
       </div>
+    </div>
+  </section>
 
-      <div class="field">
-        <label for="bodyMd">Body</label>
-        <div class="toolbar" id="toolbar">
-          <button type="button" data-md="h2" title="Heading 2">H2</button>
-          <button type="button" data-md="h3" title="Heading 3">H3</button>
-          <span class="sep"></span>
-          <button type="button" data-md="bold" title="Bold (⌘B)"><b>B</b></button>
-          <button type="button" data-md="italic" title="Italic (⌘I)"><i>I</i></button>
-          <button type="button" data-md="link" title="Link (⌘K)">Link</button>
-          <span class="sep"></span>
-          <button type="button" data-md="ul" title="Bulleted list">• List</button>
-          <button type="button" data-md="ol" title="Numbered list">1. List</button>
-          <button type="button" data-md="quote" title="Quote">&ldquo; Quote</button>
-          <span class="sep"></span>
-          <button type="button" data-md="image" title="Insert image">Image</button>
-          <button type="button" data-md="hr" title="Divider">Divider</button>
-        </div>
-        <textarea id="bodyMd" spellcheck="true" placeholder="Write in Markdown. The preview on the right is rendered by the same code that renders the live page."></textarea>
-        <input type="file" id="bodyFile" accept="image/jpeg,image/png,image/webp,image/avif" hidden>
-        <p class="field-hint">Tables and code blocks are not supported and will render as plain text.</p>
-      </div>
+  <!-- ---------------- EDITOR VIEW ---------------- -->
+  <section class="view" id="editorView">
+    <div class="editor-bar">
+      <button class="sbtn ghost" id="backToList">
+        <svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.6"><path d="M13 8H3M7 4 3 8l4 4"/></svg>
+        All posts
+      </button>
+      <span class="chip draft" id="statusChip">Draft</span>
+      <span class="save-state" id="saveState">Not saved yet</span>
+      <span class="spacer"></span>
+      <a class="sbtn" id="previewLink" target="_blank" rel="noopener">Preview</a>
+      <button class="sbtn" id="saveBtn">Save draft</button>
+      <button class="sbtn gold" id="publishBtn">Publish</button>
+      <button class="sbtn" id="unpublishBtn" hidden>Unpublish</button>
+    </div>
 
-      <details class="adv">
-        <summary>Advanced SEO &amp; byline</summary>
+    <div class="split">
+      <div class="pane-edit">
+        <p class="pane-label">Editor</p>
+        <div class="alert" id="editorError" hidden></div>
+
         <div class="field">
-          <label for="authorName">Author name</label>
-          <input type="text" id="authorName" maxlength="80" placeholder="K One Trading Desk">
+          <label for="title">Title</label>
+          <input type="text" id="title" maxlength="160" placeholder="India's coal import outlook for 2026">
         </div>
-        <div class="field">
-          <label for="seoTitle">SEO title</label>
-          <input type="text" id="seoTitle" maxlength="160">
-          <p class="field-hint" id="seoTitleHint">Defaults to the post title.</p>
-        </div>
-        <div class="field">
-          <label for="seoDescription">SEO description</label>
-          <textarea id="seoDescription" rows="2" maxlength="320"></textarea>
-          <p class="field-hint">Defaults to the excerpt.</p>
-        </div>
-      </details>
 
-      <div class="editor-actions">
-        <button class="sbtn primary" id="publishBtn">Publish</button>
-        <button class="sbtn" id="unpublishBtn" hidden>Unpublish</button>
-        <a class="sbtn" id="previewLink" target="_blank" rel="noopener">Preview live</a>
-        <span class="spacer"></span>
-        <button class="sbtn danger" id="deleteBtn">Delete</button>
-      </div>
-    </section>
+        <div class="field">
+          <label for="slug">URL slug</label>
+          <div class="slug-row">
+            <span class="prefix">k1mnr.com/insights/</span>
+            <input type="text" id="slug" maxlength="96" placeholder="india-coal-import-outlook-2026">
+          </div>
+          <p class="field-hint">Lowercase letters, numbers and hyphens. Auto-filled from the title.</p>
+        </div>
 
-    <!-- ---------- preview ---------- -->
-    <section class="pane-preview">
-      <p class="pane-label">Preview — exactly what will ship</p>
-      <div class="preview-shell">
-        <img class="cover" id="pvCover" alt="" hidden>
-        <h1 id="pvTitle">Untitled</h1>
-        <p class="standfirst" id="pvExcerpt" hidden></p>
-        <div class="prose" id="pvBody"><p class="preview-empty">Start writing to see the preview.</p></div>
+        <div class="field">
+          <label for="excerpt">Excerpt <span class="field-count" id="excerptCount">0/320</span></label>
+          <textarea id="excerpt" rows="3" maxlength="320" placeholder="One or two sentences. Used on the listing card and as the meta description."></textarea>
+        </div>
+
+        <div class="field">
+          <label>Cover image</label>
+          <div class="cover-drop" id="coverDrop">Drop an image here, or click to choose.<br>JPG, PNG, WebP or AVIF — up to 5&nbsp;MB.</div>
+          <input type="file" id="coverFile" accept="image/jpeg,image/png,image/webp,image/avif" hidden>
+          <div class="cover-preview" id="coverPreview" hidden>
+            <img id="coverImg" alt="">
+            <button class="sbtn danger rm" type="button" id="coverRemove">Remove</button>
+          </div>
+        </div>
+
+        <div class="field" id="coverAltField" hidden>
+          <label for="coverAlt">Cover alt text</label>
+          <input type="text" id="coverAlt" maxlength="200" placeholder="Describe the image for screen readers and search engines.">
+        </div>
+
+        <div class="field">
+          <label for="tagField">Tags</label>
+          <div class="tag-input" id="tagInput">
+            <input type="text" id="tagField" placeholder="Type a tag, press Enter">
+          </div>
+        </div>
+
+        <div class="field">
+          <label for="bodyMd">Body</label>
+          <div class="toolbar" id="toolbar">
+            <button type="button" data-md="h2" title="Heading 2">H2</button>
+            <button type="button" data-md="h3" title="Heading 3">H3</button>
+            <span class="sep"></span>
+            <button type="button" data-md="bold" title="Bold (⌘B)"><b>B</b></button>
+            <button type="button" data-md="italic" title="Italic (⌘I)"><i>I</i></button>
+            <button type="button" data-md="link" title="Link (⌘K)">Link</button>
+            <span class="sep"></span>
+            <button type="button" data-md="ul" title="Bulleted list">• List</button>
+            <button type="button" data-md="ol" title="Numbered list">1. List</button>
+            <button type="button" data-md="quote" title="Quote">&ldquo; Quote</button>
+            <span class="sep"></span>
+            <button type="button" data-md="image" title="Insert image">Image</button>
+            <button type="button" data-md="hr" title="Divider">Divider</button>
+          </div>
+          <textarea id="bodyMd" spellcheck="true" placeholder="Write in Markdown. The preview on the right is rendered by the same code that renders the live page."></textarea>
+          <input type="file" id="bodyFile" accept="image/jpeg,image/png,image/webp,image/avif" hidden>
+          <p class="field-hint">Tables and code blocks are not supported and will render as plain text.</p>
+        </div>
+
+        <details class="adv">
+          <summary>Advanced SEO &amp; byline</summary>
+          <div class="field">
+            <label for="authorName">Author name</label>
+            <input type="text" id="authorName" maxlength="80" placeholder="K One Trading Desk">
+          </div>
+          <div class="field">
+            <label for="seoTitle">SEO title</label>
+            <input type="text" id="seoTitle" maxlength="160">
+            <p class="field-hint" id="seoTitleHint">Defaults to the post title.</p>
+          </div>
+          <div class="field">
+            <label for="seoDescription">SEO description</label>
+            <textarea id="seoDescription" rows="2" maxlength="320"></textarea>
+            <p class="field-hint">Defaults to the excerpt.</p>
+          </div>
+        </details>
       </div>
-    </section>
+
+      <div class="pane-preview">
+        <p class="pane-label">Live preview — exactly what will ship</p>
+        <div class="preview-shell">
+          <img class="cover" id="pvCover" alt="" hidden>
+          <h1 id="pvTitle">Untitled</h1>
+          <p class="standfirst" id="pvExcerpt" hidden></p>
+          <div class="prose" id="pvBody"><p class="preview-empty">Start writing to see the preview.</p></div>
+        </div>
+      </div>
+    </div>
+  </section>
+</div>
+
+<!-- ================= CONFIRM DIALOG ================= -->
+<div class="scrim" id="scrim" hidden>
+  <div class="dialog" role="dialog" aria-modal="true" aria-labelledby="dlgTitle">
+    <h3 id="dlgTitle">Delete this post?</h3>
+    <p id="dlgBody"></p>
+    <div class="dialog-actions">
+      <button class="sbtn" id="dlgCancel">Cancel</button>
+      <button class="sbtn danger" id="dlgConfirm">Delete</button>
+    </div>
   </div>
 </div>
 

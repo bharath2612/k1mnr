@@ -11,7 +11,8 @@ export const GET: APIRoute = async ({ request, cookies }) => {
 
   const { data, error } = await db
     .from(POSTS)
-    .select('id,slug,title,status,published_at,updated_at,cover_url,author_name')
+    .select('id,slug,title,excerpt,status,published_at,updated_at,cover_url,cover_alt,tags,author_name')
+    .is('deleted_at', null)
     .order('updated_at', { ascending: false })
     .limit(200);
 
