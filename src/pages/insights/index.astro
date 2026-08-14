@@ -1,0 +1,84 @@
+---
+import Base from '../../layouts/Base.astro';
+import PostCard from '../../components/PostCard.astro';
+import { listPublished } from '../../lib/posts';
+import { ORGANIZATION, absoluteUrl } from '../../lib/organization';
+import '../../styles/insights.css';
+
+// Server-rendered so a newly published post appears without a rebuild. The
+// Vercel adapter's ISR caches this for 60s at the edge.
+export const prerender = false;
+
+const posts = await listPublished();
+
+const title = 'Industry Insights — Coal Markets, Logistics & Procurement | K One Minerals';
+const description =
+  'Analysis and commentary on thermal and metallurgical coal markets, port logistics and industrial procurement from the K One Minerals trading desk.';
+
+const jsonld = [
+  {
+    '@context': 'https://schema.org',
+    '@type': 'CollectionPage',
+    name: 'Industry Insights',
+    description,
+    url: absoluteUrl('/insights'),
+    publisher: ORGANIZATION,
+    mainEntity: {
+      '@type': 'ItemList',
+      itemListElement: posts.map((post, i) => ({
+        '@type': 'ListItem',
+        position: i + 1,
+        url: absoluteUrl(`/insights/${post.slug}`),
+        name: post.title,
+      })),
+    },
+  },
+  {
+    '@context': 'https://schema.org',
+    '@type': 'BreadcrumbList',
+    itemListElement: [
+      { '@type': 'ListItem', position: 1, name: 'Home', item: absoluteUrl('/') },
+      { '@type': 'ListItem', position: 2, name: 'Industry Insights', item: absoluteUrl('/insights') },
+    ],
+  },
+];
+---
+
+<Base
+  title={title}
+  description={description}
+  path="/insights"
+  ogType="website"
+  solidNav
+  jsonld={jsonld}
+>
+  <section class="page-head">
+    <div class="container">
+      <p class="tag reveal">Industry Insights</p>
+      <h1 class="h-display section-title reveal reveal-d1">
+        Notes from the <span class="x">trading desk.</span>
+      </h1>
+      <p class="lead reveal reveal-d2">
+        Market movements, freight economics and procurement practice — written for the
+        people who have to keep cement kilns, furnaces and turbines running.
+      </p>
+    </div>
+  </section>
+
+  <section class="insights-wrap">
+    <div class="container">
+      {
+        posts.length === 0 ? (
+          <div class="insights-empty reveal">
+            <h3>Nothing published yet.</h3>
+            <p>The first insights are being written. Check back shortly.</p>
+          </div>
+        ) : (
+          <div class="post-grid">
+            {posts.map((post, i) => <PostCard post={post} index={i} />)}
+          </div>
+        )
+      }
+    </div>
+  </section>
+</Base>

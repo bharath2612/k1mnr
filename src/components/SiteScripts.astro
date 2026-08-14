@@ -1,0 +1,61 @@
+---
+/**
+ * The original index.html:885-921 IIFE, unchanged in behaviour.
+ *
+ * `is:inline` keeps it a plain inline <script> exactly as before rather than
+ * letting Astro bundle it — the site still ships zero module JS.
+ *
+ * Only additions: null guards, because the marquee lives on the homepage alone
+ * and this now runs on every page, plus the `data-solid` branch so pages with
+ * no hero keep the solid nav instead of going transparent at scrollY 0.
+ */
+---
+
+<script is:inline>
+(function(){
+  "use strict";
+
+  var nav = document.getElementById("nav");
+  if(nav){
+    if(nav.dataset.solid === "true"){
+      nav.classList.add("scrolled");
+    } else {
+      var onScroll = function(){ nav.classList.toggle("scrolled", window.scrollY > 40); };
+      window.addEventListener("scroll", onScroll, {passive:true});
+      onScroll();
+    }
+  }
+
+  var toggle = document.getElementById("navToggle");
+  var links = document.getElementById("navLinks");
+  if(toggle && links){
+    toggle.addEventListener("click", function(){
+      var open = links.classList.toggle("open");
+      toggle.classList.toggle("open", open);
+      toggle.setAttribute("aria-expanded", open);
+      document.body.style.overflow = open ? "hidden" : "";
+    });
+    links.addEventListener("click", function(e){
+      if(e.target.tagName === "A"){
+        links.classList.remove("open");
+        toggle.classList.remove("open");
+        toggle.setAttribute("aria-expanded", "false");
+        document.body.style.overflow = "";
+      }
+    });
+  }
+
+  var track = document.getElementById("marqueeTrack");
+  if(track){ track.innerHTML += track.innerHTML; }
+
+  var io = new IntersectionObserver(function(entries){
+    entries.forEach(function(en){
+      if(en.isIntersecting){ en.target.classList.add("in"); io.unobserve(en.target); }
+    });
+  }, {threshold:.12, rootMargin:"0px 0px -40px 0px"});
+  document.querySelectorAll(".reveal").forEach(function(el){ io.observe(el); });
+
+  var year = document.getElementById("year");
+  if(year){ year.textContent = new Date().getFullYear(); }
+})();
+</script>

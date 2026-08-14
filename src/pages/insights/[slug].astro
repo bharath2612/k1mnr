@@ -1,0 +1,130 @@
+---
+import Base from '../../layouts/Base.astro';
+import { getBySlug, getRedirectTarget, formatDate } from '../../lib/posts';
+import { renderMarkdown, toPlainText } from '../../lib/markdown';
+import { ORGANIZATION, absoluteUrl } from '../../lib/organization';
+import '../../styles/insights.css';
+
+export const prerender = false;
+
+const { slug } = Astro.params;
+
+const post = slug ? await getBySlug(slug) : null;
+
+if (!post) {
+  // A slug that used to be live should 301 to its current permalink rather
+  // than 404 — the trigger on blog_posts records the old slug on every rename.
+  const target = slug ? await getRedirectTarget(slug) : null;
+  if (target) return Astro.redirect(`/insights/${target}`, 301);
+  return new Response('Not found', { status: 404 });
+}
+
+const html = renderMarkdown(post.body_md);
+const description = post.seo_description ?? post.excerpt ?? toPlainText(post.body_md, 300);
+const title = `${post.seo_title ?? post.title} — K One Minerals`;
+const path = `/insights/${post.slug}`;
+
+const jsonld = [
+  {
+    '@context': 'https://schema.org',
+    '@type': 'BlogPosting',
+    headline: post.title,
+    description,
+    image: post.cover_url ? [post.cover_url] : [absoluteUrl('/assets/og.jpg')],
+    datePublished: post.published_at,
+    dateModified: post.updated_at,
+    author: post.author_name
+      ? { '@type': 'Person', name: post.author_name }
+      : ORGANIZATION,
+    publisher: ORGANIZATION,
+    mainEntityOfPage: { '@type': 'WebPage', '@id': absoluteUrl(path) },
+    keywords: post.tags?.join(', ') || undefined,
+    wordCount: post.body_md.trim().split(/\s+/).filter(Boolean).length,
+  },
+  {
+    '@context': 'https://schema.org',
+    '@type': 'BreadcrumbList',
+    itemListElement: [
+      { '@type': 'ListItem', position: 1, name: 'Home', item: absoluteUrl('/') },
+      { '@type': 'ListItem', position: 2, name: 'Industry Insights', item: absoluteUrl('/insights') },
+      { '@type': 'ListItem', position: 3, name: post.title, item: absoluteUrl(path) },
+    ],
+  },
+];
+---
+
+<Base
+  title={title}
+  description={description}
+  path={path}
+  ogType="article"
+  image={post.cover_url ?? '/assets/og.jpg'}
+  imageAlt={post.cover_alt ?? post.title}
+  imageWidth={post.cover_width ?? 1200}
+  imageHeight={post.cover_height ?? 630}
+  publishedTime={post.published_at ?? undefined}
+  modifiedTime={post.updated_at}
+  solidNav
+  jsonld={jsonld}
+>
+  <article>
+    <header class="post-head">
+      <div class="container">
+        <nav class="post-breadcrumb" aria-label="Breadcrumb">
+          <a href="/">Home</a>
+          <span aria-hidden="true">/</span>
+          <a href="/insights">Industry Insights</a>
+        </nav>
+
+        <h1 class="post-title">{post.title}</h1>
+
+        {post.excerpt && <p class="post-standfirst">{post.excerpt}</p>}
+
+        <div class="post-byline">
+          {post.author_name && <span><b>{post.author_name}</b></span>}
+          {post.author_name && <span aria-hidden="true">·</span>}
+          <time datetime={post.published_at ?? undefined}>{formatDate(post.published_at)}</time>
+          {post.reading_minutes && <span aria-hidden="true">·</span>}
+          {post.reading_minutes && <span>{post.reading_minutes} min read</span>}
+        </div>
+
+        {
+          post.cover_url && (
+            <figure class="post-cover">
+              <img
+                src={post.cover_url}
+                alt={post.cover_alt ?? ''}
+                width={post.cover_width ?? undefined}
+                height={post.cover_height ?? undefined}
+                fetchpriority="high"
+                decoding="async"
+              />
+            </figure>
+          )
+        }
+      </div>
+    </header>
+
+    <div class="post-body-wrap">
+      <div class="container">
+        <div class="prose" set:html={html} />
+
+        <div class="post-foot">
+          {
+            post.tags?.length > 0 && (
+              <ul class="product-tags">
+                {post.tags.map((tag) => <li>{tag}</li>)}
+              </ul>
+            )
+          }
+          <a class="btn btn-line" href="/insights">
+            All insights
+            <svg width="16" height="12" viewBox="0 0 16 12" fill="none"
+              ><path d="M1 6h13M10 1l5 5-5 5" stroke="currentColor" stroke-width="1.5"></path></svg
+            >
+          </a>
+        </div>
+      </div>
+    </div>
+  </article>
+</Base>

@@ -1,0 +1,97 @@
+---
+import Base from '../../../layouts/Base.astro';
+import { isAuthed } from '../../../lib/server/session';
+import { serviceDb } from '../../../lib/server/supabase';
+import { renderMarkdown, toPlainText } from '../../../lib/markdown';
+import { formatDate } from '../../../lib/posts';
+import '../../../styles/insights.css';
+
+export const prerender = false;
+
+/**
+ * Draft preview. Lives under /studio rather than as a ?preview= query param on
+ * the public post route for two reasons: /studio is already excluded from ISR
+ * (a cached draft would be a disclosure bug), and it is already disallowed in
+ * robots.txt.
+ */
+Astro.response.headers.set('cache-control', 'no-store, private');
+
+if (!(await isAuthed(Astro))) {
+  return Astro.redirect('/studio', 302);
+}
+
+const { id } = Astro.params;
+const { data: post } = await serviceDb()
+  .from('blog_posts')
+  .select('*')
+  .eq('id', id ?? '')
+  .maybeSingle();
+
+if (!post) return new Response('Not found', { status: 404 });
+
+const html = renderMarkdown(post.body_md);
+const description = post.excerpt ?? toPlainText(post.body_md, 200);
+---
+
+<Base
+  title={`[DRAFT] ${post.title} — K One Minerals`}
+  description={description}
+  path={`/studio/preview/${id}`}
+  noindex
+  solidNav
+>
+  <p class="draft-banner">
+    Draft preview — not visible to the public
+    {post.status === 'published' && ' · this post is currently published'}
+  </p>
+
+  <article>
+    <header class="post-head">
+      <div class="container">
+        <nav class="post-breadcrumb" aria-label="Breadcrumb">
+          <a href="/studio">Studio</a>
+          <span aria-hidden="true">/</span>
+          <span>Preview</span>
+        </nav>
+
+        <h1 class="post-title">{post.title}</h1>
+        {post.excerpt && <p class="post-standfirst">{post.excerpt}</p>}
+
+        <div class="post-byline">
+          {post.author_name && <span><b>{post.author_name}</b></span>}
+          {post.author_name && <span aria-hidden="true">·</span>}
+          <span>{post.published_at ? formatDate(post.published_at) : 'Not yet published'}</span>
+          {post.reading_minutes && <span aria-hidden="true">·</span>}
+          {post.reading_minutes && <span>{post.reading_minutes} min read</span>}
+        </div>
+
+        {
+          post.cover_url && (
+            <figure class="post-cover">
+              <img
+                src={post.cover_url}
+                alt={post.cover_alt ?? ''}
+                width={post.cover_width ?? undefined}
+                height={post.cover_height ?? undefined}
+              />
+            </figure>
+          )
+        }
+      </div>
+    </header>
+
+    <div class="post-body-wrap">
+      <div class="container">
+        <div class="prose" set:html={html} />
+        <div class="post-foot">
+          {
+            post.tags?.length > 0 && (
+              <ul class="product-tags">{post.tags.map((tag: string) => <li>{tag}</li>)}</ul>
+            )
+          }
+          <a class="btn btn-line" href="/studio">Back to Studio</a>
+        </div>
+      </div>
+    </div>
+  </article>
+</Base>

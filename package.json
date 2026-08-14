@@ -1,0 +1,32 @@
+{
+  "name": "k1mnr",
+  "type": "module",
+  "version": "1.0.0",
+  "private": true,
+  "scripts": {
+    "dev": "astro dev",
+    "build": "astro build && npm run check:secrets",
+    "preview": "astro preview",
+    "check": "astro check",
+    "check:secrets": "node scripts/check-secrets.mjs",
+    "diff:visual": "node scripts/visual-diff.mjs",
+    "test": "playwright test"
+  },
+  "dependencies": {
+    "@astrojs/rss": "^4.0.19",
+    "@astrojs/vercel": "^11.0.5",
+    "@supabase/supabase-js": "^2.58.0",
+    "astro": "^7.2.1",
+    "marked": "^15.0.12",
+    "sanitize-html": "^2.17.0"
+  },
+  "devDependencies": {
+    "@astrojs/check": "^0.9.10",
+    "@playwright/test": "^1.55.1",
+    "@types/node": "^26.2.0",
+    "@types/sanitize-html": "^2.16.0",
+    "pixelmatch": "^6.0.0",
+    "pngjs": "^7.0.0",
+    "typescript": "^5.9.2"
+  }
+}

@@ -1,0 +1,38 @@
+---
+/**
+ * Ported verbatim from index.html:558-579. Two mechanical changes only:
+ *   1. asset path made root-absolute (would 404 from /insights/<slug>)
+ *   2. hash links made /#anchor (a bare #about does nothing from a post page)
+ * Plus the new "Industry Insights" tab.
+ *
+ * `solid` starts the nav in its scrolled state for pages with no hero behind it.
+ */
+export interface Props {
+  solid?: boolean;
+}
+const { solid = false } = Astro.props;
+---
+
+<header class:list={['nav', { scrolled: solid }]} id="nav" data-solid={solid ? 'true' : 'false'}>
+  <div class="container nav-inner">
+    <a class="brand" href="/" aria-label="K One Minerals home">
+      <img class="brand-logo" src="/assets/logo.png" alt="K One Minerals logo">
+      <span class="brand-name">
+        <b>K One Minerals</b>
+        <span>&amp; Natural Resources LLP</span>
+      </span>
+    </a>
+    <nav class="nav-links" id="navLinks" aria-label="Primary">
+      <a href="/#about">About</a>
+      <a href="/#products">Products</a>
+      <a href="/#industries">Industries</a>
+      <a href="/#services">Services</a>
+      <a href="/#process">Process</a>
+      <a href="/insights">Industry Insights</a>
+      <a href="/#contact">Contact</a>
+    </nav>
+    <button class="nav-toggle" id="navToggle" aria-label="Toggle menu" aria-expanded="false">
+      <span></span><span></span><span></span>
+    </button>
+  </div>
+</header>

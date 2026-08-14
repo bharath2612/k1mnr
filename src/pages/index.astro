@@ -1,0 +1,280 @@
+---
+import Base from '../layouts/Base.astro';
+import { ORGANIZATION_JSONLD } from '../lib/organization';
+
+// Homepage is fully prerendered at build time: it must never depend on
+// Supabase being reachable.
+export const prerender = true;
+---
+
+<Base
+  title="K One Minerals & Natural Resources LLP — Industrial Commodity Procurement & Trading"
+  description="K One Minerals & Natural Resources LLP secures high-grade thermal and metallurgical coal directly from global tier-1 mines, handling end-to-end port logistics for India's cement, steel and power industries."
+  keywords="thermal coal supply, metallurgical coal, coal trading, port logistics, commodity trading, industrial minerals, limestone, dolomite, iron ore, procurement services, Hyderabad, India"
+  path="/"
+  ogType="website"
+  jsonld={[ORGANIZATION_JSONLD]}
+>
+
+<!-- ================= HERO ================= -->
+<section class="hero" id="top">
+  <div class="hero-bg" aria-hidden="true"></div>
+  <div class="container hero-inner">
+    <h1 class="h-anim">Driving industrial continuity<br>with <span class="x">predictable coal<br>trading &amp; logistics.</span></h1>
+    <div class="hero-row h-anim">
+      <p class="hero-sub">We secure <strong>high-grade thermal and metallurgical coal</strong> directly from global tier-1 mines, handling end-to-end port logistics so your power plants and furnaces never run dry.</p>
+      <div class="hero-ctas">
+        <a class="btn btn-ember" href="#contact">Contact Us
+          <svg width="16" height="12" viewBox="0 0 16 12" fill="none"><path d="M1 6h13M10 1l5 5-5 5" stroke="currentColor" stroke-width="1.5"/></svg>
+        </a>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ================= MARQUEE ================= -->
+<div class="marquee" aria-hidden="true">
+  <div class="marquee-track" id="marqueeTrack">
+    <span>Industrial Commodity Procurement</span>
+    <span>Bulk Mineral Supply</span>
+    <span>Reliable Logistics</span>
+    <span>Domestic &amp; International Trade</span>
+    <span>Strategic Sourcing</span>
+    <span>Long-Term Supply Partnerships</span>
+  </div>
+</div>
+
+<!-- ================= ABOUT ================= -->
+<section class="about light" id="about">
+  <div class="container">
+    <div class="about-grid">
+      <div>
+        <p class="tag reveal">Who We Are</p>
+        <h2 class="h-display section-title reveal reveal-d1">Built for the industries<br><span class="x">that cannot stop.</span></h2>
+        <p class="about-statement reveal reveal-d2">We exist to take global supply chain volatility off your balance sheet with precision-grade energy resources with absolute timeline certainty.</p>
+        <p class="lead reveal reveal-d3" style="margin-top:26px">We serve the <em>cement, steel and power</em> sectors — disciplined procurement, dependable delivery, one consignment at a time.</p>
+        <div class="vm reveal reveal-d3">
+          <div class="vm-card">
+            <h3>Core Values</h3>
+            <ul class="values">
+              <li>Integrity</li><li>Reliability</li><li>Transparency</li>
+              <li>Professionalism</li><li>Commitment</li><li>Customer Success</li>
+            </ul>
+          </div>
+        </div>
+      </div>
+      <div>
+        <figure class="about-photo reveal">
+          <img src="/assets/coal-rock.png" alt="Bituminous coal specimen" loading="lazy">
+        </figure>
+        <div class="vm reveal reveal-d1">
+          <div class="vm-card">
+            <h3>Vision</h3>
+            <p class="vm-lead">To eliminate supply risk from industrial energy procurement.</p>
+            <p>We envision a global market where heavy industry never faces power drops, production halts, or unpredictable cost spikes due to trade bottlenecks. K ONE is setting the standard for transparent, ironclad commodity delivery across borders.</p>
+          </div>
+          <div class="vm-card">
+            <h3>Mission</h3>
+            <p class="vm-lead">To connect primary energy extraction directly to industrial execution with zero friction.</p>
+            <p>We leverage direct-from-mine access, strategic port controls, and rigorous quality inspection to deliver exact-specification coal and natural resources on time, every time, under any market condition.</p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ================= PRODUCTS ================= -->
+<section class="products" id="products">
+  <div class="container">
+    <div class="products-head">
+      <div>
+        <p class="tag reveal">Products</p>
+        <h2 class="h-display section-title reveal reveal-d1">The materials that<br><span class="x">move industry.</span></h2>
+      </div>
+      <p class="lead reveal reveal-d2" style="max-width:38ch">Precision-grade thermal coal, metallurgical inputs, and industrial minerals delivered on schedule.</p>
+    </div>
+    <div class="product-grid">
+      <article class="product-card reveal">
+        <span class="product-num">Energy</span>
+        <h3>Coal</h3>
+        <p>Consistent-quality fuel supply for power generation and industrial heating, sourced domestically and through established import channels.</p>
+        <ul class="product-tags"><li>Thermal Coal</li><li>Imported Coal</li><li>Industrial Fuel</li></ul>
+      </article>
+      <article class="product-card reveal reveal-d1">
+        <span class="product-num">Minerals</span>
+        <h3>Industrial Minerals</h3>
+        <p>Bulk mineral supply with verified grades and clean documentation for cement, steel, glass and processing applications.</p>
+        <ul class="product-tags"><li>Limestone</li><li>Dolomite</li><li>Gypsum</li><li>Iron Ore</li><li>Bauxite</li><li>Silica Sand</li><li>Fly Ash</li></ul>
+      </article>
+      <article class="product-card reveal reveal-d2">
+        <span class="product-num">Materials</span>
+        <h3>Raw Materials</h3>
+        <p>Dependable supply of raw material inputs for heavy industry — planned, negotiated, delivered end to end.</p>
+        <ul class="product-tags"><li>Industrial Inputs</li><li>Process Materials</li><li>Bulk Supply</li></ul>
+      </article>
+      <article class="product-card reveal reveal-d3">
+        <span class="product-num">Bespoke</span>
+        <h3>Custom Procurement</h3>
+        <p>A requirement we don't already stock is a requirement we source. Specification, volume, timeline — we handle the rest.</p>
+        <ul class="product-tags"><li>Specification-Led</li><li>Volume Flexible</li><li>Timeline Committed</li></ul>
+      </article>
+    </div>
+  </div>
+</section>
+
+<!-- ================= SUPPLY BAND ================= -->
+<section class="band">
+  <div class="band-bg " aria-hidden="true"></div>
+  <div class="container band-inner">
+    <p class="tag reveal">Ground Operations</p>
+    <h2 class="h-display section-title reveal reveal-d1">End-to-end control over <span class="x">every metric ton.</span></h2>
+    <p class="lead reveal reveal-d2">Eliminating demurrage risks and shipping bottlenecks with hands-on port management, third-party testing, and real-time cargo tracking.</p>
+  </div>
+</section>
+
+<!-- ================= INDUSTRIES ================= -->
+<section class="industries light" id="industries">
+  <div class="container">
+    <p class="tag reveal">Industries We Serve</p>
+    <h2 class="h-display section-title reveal reveal-d1">Industries powered <span class="x">by K One.</span></h2>
+    <div class="ind-grid">
+      <div class="ind-cell reveal"><i>01</i><h3>Cement</h3><p>Limestone, gypsum, fly ash and fuel — the full input basket for clinker and grinding units.</p></div>
+      <div class="ind-cell reveal reveal-d1"><i>02</i><h3>Steel</h3><p>Iron ore, dolomite and reductants supplied to demanding metallurgical specifications.</p></div>
+      <div class="ind-cell reveal reveal-d2"><i>03</i><h3>Power Generation</h3><p>Thermal and imported coal on dependable delivery schedules for uninterrupted generation.</p></div>
+    </div>
+  </div>
+</section>
+
+<!-- ================= SERVICES ================= -->
+<section class="services" id="services">
+  <div class="container">
+    <div class="svc-grid">
+      <div class="svc-sticky">
+        <p class="tag reveal">Procurement Services</p>
+        <h2 class="h-display section-title reveal reveal-d1">Procurement, handled <span class="x">end to end.</span></h2>
+        <p class="lead reveal reveal-d2" style="margin-top:26px">We act as your dedicated procurement arm — nine disciplines, one accountable partner.</p>
+        <ul class="svc-benefits reveal reveal-d3">
+          <li><span><b>Lower procurement cost</b> through negotiated commercial terms</span></li>
+          <li><span><b>Reliable supply</b> backed by a vetted supplier network</span></li>
+          <li><span><b>Quality assurance</b> at source, in transit, on delivery</span></li>
+          <li><span><b>Efficient supply chain</b> from purchase order to unloading</span></li>
+        </ul>
+      </div>
+      <div class="svc-list">
+        <div class="svc-item reveal"><div><h3>Supplier Identification</h3><p>Mapping and qualifying sources that meet your specification and scale.</p></div></div>
+        <div class="svc-item reveal"><div><h3>Vendor Evaluation</h3><p>Structured assessment of capability, capacity and compliance.</p></div></div>
+        <div class="svc-item reveal"><div><h3>Commercial Negotiation</h3><p>Terms negotiated in your interest — price, credit, delivery.</p></div></div>
+        <div class="svc-item reveal"><div><h3>Quality Verification</h3><p>Material verified against specification before it moves.</p></div></div>
+        <div class="svc-item reveal"><div><h3>Purchase Coordination</h3><p>Orders placed, tracked and reconciled with full visibility.</p></div></div>
+        <div class="svc-item reveal"><div><h3>Supply Planning</h3><p>Volumes phased to match your consumption and storage.</p></div></div>
+        <div class="svc-item reveal"><div><h3>Logistics Coordination</h3><p>Road, rail and port movements orchestrated door to door.</p></div></div>
+        <div class="svc-item reveal"><div><h3>Delivery Monitoring</h3><p>Every consignment tracked until it reaches your gate.</p></div></div>
+        <div class="svc-item reveal"><div><h3>Documentation Support</h3><p>Clean, complete, audit-ready paperwork on every transaction.</p></div></div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ================= PROCESS ================= -->
+<section class="process light" id="process">
+  <div class="container">
+    <p class="tag reveal">Our Process</p>
+    <h2 class="h-display section-title reveal reveal-d1">Requirement to delivery —<br>six <span class="x">deliberate steps.</span></h2>
+    <div class="process-track">
+      <div class="step reveal"><i>01</i><h3>Requirement Analysis</h3><p>Specification, volume and timeline defined.</p></div>
+      <div class="step reveal reveal-d1"><i>02</i><h3>Strategic Sourcing</h3><p>The right source for the right material.</p></div>
+      <div class="step reveal reveal-d2"><i>03</i><h3>Commercial Evaluation</h3><p>Terms benchmarked and negotiated.</p></div>
+      <div class="step reveal"><i>04</i><h3>Quality Verification</h3><p>Material checked against specification.</p></div>
+      <div class="step reveal reveal-d1"><i>05</i><h3>Logistics Coordination</h3><p>Movement planned and monitored.</p></div>
+      <div class="step reveal reveal-d2"><i>06</i><h3>Timely Delivery</h3><p>On schedule, fully documented.</p></div>
+    </div>
+  </div>
+</section>
+
+<!-- ================= WHY ================= -->
+<section class="why" id="why">
+  <div class="why-bg" aria-hidden="true"></div>
+  <div class="container why-grid">
+    <div>
+      <p class="tag reveal">Why Choose Us</p>
+      <h2 class="h-display section-title reveal reveal-d1">Built to protect <span class="x">your supply line.</span></h2>
+      <ul class="why-list reveal reveal-d2">
+        <li><span><b>Strong supplier network</b> across domestic and international markets</span></li>
+        <li><span><b>Professional procurement team</b> with sector-specific expertise</span></li>
+        <li><span><b>Competitive pricing</b> without compromise on grade</span></li>
+        <li><span><b>Transparent documentation</b> on every consignment</span></li>
+        <li><span><b>Reliable logistics</b> by road, rail and sea</span></li>
+        <li><span><b>Ethical business practices</b> as a matter of principle</span></li>
+        <li><span><b>Customer-focused service</b> from enquiry to delivery</span></li>
+      </ul>
+    </div>
+    <div class="twin-cards">
+      <div class="twin reveal">
+        <h3>Sustainability</h3>
+        <p>We source with responsibility — to communities, to compliance, and to the environments our industry depends on. Long-term value beats short-term margin, every time.</p>
+        <ul><li>Responsible Procurement</li><li>Ethical Conduct</li><li>Environmental Awareness</li><li>Regulatory Compliance</li><li>Long-Term Value</li></ul>
+      </div>
+      <div class="twin reveal reveal-d1">
+        <h3>Quality Commitment</h3>
+        <p>Quality is not an inspection at the end — it is a discipline throughout. Every supplier assessed, every material verified, every delivery monitored, every process improved.</p>
+        <ul><li>Supplier Assessment</li><li>Material Verification</li><li>Quality Documentation</li><li>Delivery Monitoring</li><li>Continuous Improvement</li></ul>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ================= CTA STRIP ================= -->
+<section class="cta-strip">
+  <div class="container cta-inner">
+    <h2 class="reveal">Have a requirement? Put it on schedule.</h2>
+    <a class="btn btn-carbon reveal reveal-d1" href="#contact">Contact Us
+      <svg width="16" height="12" viewBox="0 0 16 12" fill="none"><path d="M1 6h13M10 1l5 5-5 5" stroke="currentColor" stroke-width="1.5"/></svg>
+    </a>
+  </div>
+</section>
+
+<!-- ================= CONTACT ================= -->
+<section class="contact" id="contact">
+  <div class="container">
+    <div class="contact-grid">
+      <div>
+        <p class="tag reveal">Contact</p>
+        <h2 class="h-display section-title reveal reveal-d1">Speak with the <span class="x">trading desk.</span></h2>
+        <div class="c-block reveal reveal-d2">
+          <h4>Registered Office</h4>
+          <p>Plot No. 3-225, Divya Diamonds, Sterling Heights,<br>Kavuri Hills Road, Madhapur,<br>Hyderabad, Telangana – 500033, India</p>
+          <p style="margin-top:12px"><a class="c-link" href="https://maps.app.goo.gl/gfWqEpVNZ4bTLTSa6" target="_blank" rel="noopener">Get directions ↗</a></p>
+        </div>
+        <div class="c-block reveal reveal-d2">
+          <h4>Phone</h4>
+          <p><a href="tel:+917780780999">+91 77807 80999</a></p>
+        </div>
+      </div>
+      <div>
+        <div class="connect-card reveal reveal-d1">
+          <h3>Reach the desk directly.</h3>
+          <p>Enquiries answered within one business day.</p>
+          <a class="connect-row" href="tel:+917780780999">
+            <span>+91 77807 80999</span>
+            <svg width="16" height="12" viewBox="0 0 16 12" fill="none"><path d="M1 6h13M10 1l5 5-5 5" stroke="currentColor" stroke-width="1.5"/></svg>
+          </a>
+          <a class="connect-row" href="https://wa.me/917780780999?text=Hello%20K%20One%20Minerals%2C%20I%20have%20a%20procurement%20enquiry." target="_blank" rel="noopener">
+            <span>Chat on WhatsApp</span>
+            <svg width="16" height="12" viewBox="0 0 16 12" fill="none"><path d="M1 6h13M10 1l5 5-5 5" stroke="currentColor" stroke-width="1.5"/></svg>
+          </a>
+          <a class="connect-row" href="https://www.linkedin.com/company/k-one-minerals-natural-resources-llp/" target="_blank" rel="noopener">
+            <span>K One Minerals on LinkedIn</span>
+            <svg width="16" height="12" viewBox="0 0 16 12" fill="none"><path d="M1 6h13M10 1l5 5-5 5" stroke="currentColor" stroke-width="1.5"/></svg>
+          </a>
+        </div>
+      </div>
+    </div>
+    <div class="map-wrap reveal">
+      <iframe title="K One Minerals — Registered Office, Madhapur, Hyderabad" loading="lazy" referrerpolicy="no-referrer-when-downgrade" src="https://www.google.com/maps?q=17.4358540,78.3945201&z=17&output=embed"></iframe>
+    </div>
+  </div>
+</section>
+
+<!-- ================= FOOTER ================= -->
+</Base>

@@ -1,0 +1,47 @@
+---
+import { formatDate, type PostCard } from '../lib/posts';
+
+export interface Props {
+  post: PostCard;
+  /** Stagger index, mapped onto the existing .reveal-d1..d3 delay classes. */
+  index?: number;
+}
+
+const { post, index = 0 } = Astro.props;
+const delay = index % 4 === 0 ? '' : ` reveal-d${index % 4}`;
+---
+
+<article class={`post-card reveal${delay}`}>
+  <a href={`/insights/${post.slug}`} aria-label={post.title}>
+    {
+      post.cover_url && (
+        <div class="post-card-cover">
+          <img
+            src={post.cover_url}
+            alt={post.cover_alt ?? ''}
+            width={post.cover_width ?? undefined}
+            height={post.cover_height ?? undefined}
+            loading="lazy"
+            decoding="async"
+          />
+        </div>
+      )
+    }
+    <div class="post-card-body">
+      <p class="post-meta">
+        <span>{formatDate(post.published_at)}</span>
+        {post.reading_minutes && <span class="dot" aria-hidden="true"></span>}
+        {post.reading_minutes && <span class="mins">{post.reading_minutes} min read</span>}
+      </p>
+      <h3>{post.title}</h3>
+      <p>{post.excerpt}</p>
+      {
+        post.tags?.length > 0 && (
+          <ul class="product-tags">
+            {post.tags.slice(0, 4).map((tag) => <li>{tag}</li>)}
+          </ul>
+        )
+      }
+    </div>
+  </a>
+</article>
