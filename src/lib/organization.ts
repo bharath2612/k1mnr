@@ -35,7 +35,6 @@ export const ORGANIZATION = {
   taxID: '36ABFFK9349C1Z6',
   founder: [
     { '@type': 'Person', name: 'Trishneeth Korivi', jobTitle: 'Managing Partner & Designated Partner' },
-    { '@type': 'Person', name: 'Kurre Rupadevi', jobTitle: 'Designated Partner' },
   ],
   employee: [
     { '@type': 'Person', name: 'Phani Srinivas Reddy Kurre', jobTitle: 'Chief Executive Officer' },

@@ -1,6 +1,7 @@
 ---
 import Base from '../layouts/Base.astro';
 import { ORGANIZATION_JSONLD, LOCALBUSINESS_JSONLD } from '../lib/organization';
+import { INDUSTRIES, productBySlug } from '../lib/catalog';
 
 // Homepage is fully prerendered at build time: it must never depend on
 // Supabase being reachable.
@@ -65,7 +66,6 @@ export const prerender = true;
             <h3>Leadership</h3>
             <p><b>Phani Srinivas Reddy Kurre</b> — Chief Executive Officer</p>
             <p><b>Trishneeth Korivi</b> — Managing Partner &amp; Designated Partner</p>
-            <p><b>Kurre Rupadevi</b> — Designated Partner</p>
             <p style="margin-top:12px">Incorporated as an LLP in July 2026 (LLPIN ACZ-7623), built by people with working experience in commodity sourcing and industrial supply. Every registration detail is independently verifiable on the MCA and GST portals.</p>
           </div>
         </div>
@@ -145,10 +145,33 @@ export const prerender = true;
   <div class="container">
     <p class="tag reveal">Industries We Serve</p>
     <h2 class="h-display section-title reveal reveal-d1">Industries powered <span class="x">by K One.</span></h2>
-    <div class="ind-grid">
-      <a class="ind-cell reveal" href="/industries/cement"><i>01</i><h3>Cement</h3><p>Limestone, gypsum, fly ash and fuel — the full input basket for clinker and grinding units.</p></a>
-      <a class="ind-cell reveal reveal-d1" href="/industries/steel"><i>02</i><h3>Steel</h3><p>Iron ore, dolomite and reductants supplied to demanding metallurgical specifications.</p></a>
-      <a class="ind-cell reveal reveal-d2" href="/industries/power"><i>03</i><h3>Power Generation</h3><p>Thermal and imported coal on dependable delivery schedules for uninterrupted generation.</p></a>
+    <div class="ind-acc">
+      {INDUSTRIES.map((ind, i) => (
+        <details class="ind-item reveal" name="industries" open={i === 0}>
+          <summary>
+            <i>{String(i + 1).padStart(2, '0')}</i>
+            <span class="ind-head">
+              <span class="ind-name">{ind.name}</span>
+              <span class="ind-blurb">{ind.blurb}</span>
+            </span>
+            <svg class="ind-chev" width="14" height="9" viewBox="0 0 14 9" fill="none" aria-hidden="true"><path d="M1 1l6 6 6-6" stroke="currentColor" stroke-width="1.5"/></svg>
+          </summary>
+          <div class="ind-panel">
+            {ind.description.map((para) => <p>{para}</p>)}
+            <ul class="ind-inputs">
+              {ind.inputs.map((input) => (
+                <li>
+                  <a href={`/products/${input.slug}`}>{productBySlug(input.slug)?.name}</a>
+                  <span>{input.role}</span>
+                </li>
+              ))}
+            </ul>
+            <a class="ind-more" href={`/industries/${ind.slug}`}>View the full {ind.name.toLowerCase()} supply programme
+              <svg width="14" height="11" viewBox="0 0 16 12" fill="none"><path d="M1 6h13M10 1l5 5-5 5" stroke="currentColor" stroke-width="1.5"/></svg>
+            </a>
+          </div>
+        </details>
+      ))}
     </div>
   </div>
 </section>

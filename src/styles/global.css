@@ -267,7 +267,6 @@ body::before{
   transition:border-color .3s,color .3s;
 }
 .product-tags li:has(a:hover){border-color:var(--gold);color:var(--gold-hi)}
-.ind-cell{display:block}
 @media(max-width:820px){.product-grid{grid-template-columns:1fr}}
 
 /* ============ SUPPLY BAND (full-bleed photo) ============ */
@@ -287,36 +286,45 @@ body::before{
 .band h2{font-size:clamp(29px,3.9vw,52px);max-width:18ch}
 .band p{margin-top:22px}
 
-/* ============ INDUSTRIES (light) ============ */
+/* ============ INDUSTRIES (light, accordion) ============ */
 .industries{padding:118px 0}
-.ind-grid{
-  display:grid;grid-template-columns:repeat(3,1fr);
-  border-top:1px solid var(--line-light);
-  margin-top:58px;
+.ind-acc{margin-top:58px;border-top:1px solid var(--line-light)}
+.ind-item{border-bottom:1px solid var(--line-light)}
+.ind-item summary{
+  list-style:none;cursor:pointer;
+  display:grid;grid-template-columns:56px 1fr auto;gap:20px;align-items:center;
+  padding:26px 10px;transition:background .35s;
 }
-.ind-cell{
-  border-bottom:1px solid var(--line-light);
-  padding:36px 34px 34px;position:relative;transition:background .35s;
+.ind-item summary::-webkit-details-marker{display:none}
+.ind-item summary:hover{background:rgba(18,33,27,.05)}
+.ind-item summary i{font-family:var(--serif);font-style:italic;font-size:16px;color:var(--sage)}
+.ind-head{display:flex;flex-direction:column;gap:3px;min-width:0}
+.ind-name{font-family:var(--serif);font-weight:400;font-size:25px;letter-spacing:-.01em;color:var(--ink);transition:color .3s}
+.ind-item summary:hover .ind-name,.ind-item[open] .ind-name{color:var(--gold-deep)}
+.ind-blurb{font-size:14px;color:var(--ink-2);font-weight:300;line-height:1.6}
+.ind-chev{color:var(--gold-deep);flex:none;transition:transform .35s var(--ease)}
+.ind-item[open] .ind-chev{transform:rotate(180deg)}
+.ind-panel{padding:6px 10px 36px 86px}
+.ind-panel>p{font-size:15px;color:var(--ink-2);line-height:1.75;font-weight:300;max-width:68ch;margin-bottom:12px}
+.ind-inputs{margin-top:14px;border-top:1px solid var(--line-light)}
+.ind-inputs li{
+  display:grid;grid-template-columns:190px 1fr;gap:18px;align-items:baseline;
+  padding:12px 0;border-bottom:1px solid var(--line-light);
 }
-.ind-cell+.ind-cell{border-left:1px solid var(--line-light)}
-.ind-cell:hover{background:rgba(18,33,27,.05)}
-.ind-cell i{
-  font-family:var(--serif);font-style:italic;font-size:16px;
-  color:var(--sage);display:block;margin-bottom:26px;
+.ind-inputs a{font-family:var(--serif);font-size:16.5px;color:var(--ink);transition:color .3s}
+.ind-inputs a:hover{color:var(--gold-deep)}
+.ind-inputs span{font-size:13.5px;color:var(--ink-2);font-weight:300}
+.ind-more{
+  display:inline-flex;align-items:center;gap:10px;margin-top:22px;
+  font-size:14px;font-weight:400;color:var(--gold-deep);
 }
-.ind-cell h3{
-  font-family:var(--serif);font-weight:400;
-  font-size:25px;letter-spacing:-.01em;color:var(--ink);margin-bottom:10px;
-}
-.ind-cell:hover h3{color:var(--gold-deep)}
-.ind-cell p{font-size:14.5px;color:var(--ink-2);line-height:1.75}
-@media(max-width:900px){
-  .ind-grid{grid-template-columns:repeat(2,1fr)}
-  .ind-cell:nth-child(odd){border-left:none}
-}
-@media(max-width:600px){
-  .ind-grid{grid-template-columns:1fr}
-  .ind-cell{border-left:none!important}
+.ind-more svg{transition:transform .3s var(--ease)}
+.ind-more:hover svg{transform:translateX(5px)}
+@media(max-width:700px){
+  .ind-item summary{grid-template-columns:34px 1fr auto;gap:12px;padding:20px 2px}
+  .ind-name{font-size:21px}
+  .ind-panel{padding:2px 2px 30px}
+  .ind-inputs li{grid-template-columns:1fr;gap:2px}
 }
 
 /* ============ SERVICES (dark) ============ */
@@ -545,5 +553,4 @@ footer{background:var(--forest-deep);color:var(--silver-dim);padding:76px 0 38px
   .about,.products,.industries,.services,.process,.contact{padding-top:92px;padding-bottom:86px}
   .why{padding:100px 0}
   .product-card{padding:34px 26px}
-  .ind-cell{padding:32px 26px}
 }
