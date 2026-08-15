@@ -3,7 +3,11 @@
  * Ported verbatim from index.html:842-877, with the same two mechanical fixes
  * as Nav.astro plus the Industry Insights entry in the Explore column.
  * The <span id="year"> is still filled by SiteScripts.astro.
+ *
+ * Statutory identifiers (LLPIN/GSTIN/IEC) render from REGISTRATION once K One
+ * supplies the values in organization.ts — nothing shows while they're empty.
  */
+import { REGISTRATION } from '../lib/organization';
 ---
 
 <footer>
@@ -38,6 +42,13 @@
         </ul>
       </div>
     </div>
+    {REGISTRATION.length > 0 && (
+      <p class="foot-legal">
+        {REGISTRATION.map((r) => (
+          <span>{r.label}: {r.value}</span>
+        ))}
+      </p>
+    )}
     <div class="foot-base">
       <span>© <span id="year">2026</span> K One Minerals &amp; Natural Resources LLP</span>
       <span>Predictable coal trading. End-to-end logistics.</span>

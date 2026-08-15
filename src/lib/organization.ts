@@ -8,6 +8,18 @@ export const SITE_URL = 'https://k1mnr.com';
 
 export const SITE_NAME = 'K One Minerals & Natural Resources LLP';
 
+/**
+ * Statutory identifiers — standard credibility markers for Indian industrial
+ * B2B. Values must come from K One's actual registrations; fill them in here
+ * and they appear in the footer and structured data automatically. Empty
+ * strings render nothing, so this can ship ahead of the data.
+ */
+export const REGISTRATION: { label: string; value: string }[] = [
+  { label: 'LLPIN', value: '' }, // LLP identification number, e.g. 'ACx-xxxx'
+  { label: 'GSTIN', value: '' }, // 15-character GST number
+  { label: 'IEC', value: '' },   // Import Export Code, if import ops are active
+].filter((r) => r.value !== '');
+
 export const ORGANIZATION = {
   '@type': 'Organization',
   name: SITE_NAME,
