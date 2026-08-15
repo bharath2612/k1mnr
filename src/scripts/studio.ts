@@ -62,8 +62,30 @@ const state: StudioState = {
   saved: false,
 };
 
+interface Enquiry {
+  id: string;
+  material: string;
+  grade_spec: string | null;
+  quantity_mt: number | null;
+  contract_type: string;
+  destination: string | null;
+  timeline: string | null;
+  company: string;
+  contact_name: string;
+  designation: string | null;
+  phone: string;
+  email: string;
+  message: string | null;
+  status: 'new' | 'contacted' | 'qualified' | 'closed' | 'spam';
+  created_at: string;
+}
+
+const ENQ_STATUSES = ['new', 'contacted', 'qualified', 'closed', 'spam'] as const;
+
 let posts: PostSummary[] = [];
 let filter: 'all' | 'published' | 'draft' = 'all';
+let enquiries: Enquiry[] = [];
+let enqFilter: 'all' | Enquiry['status'] = 'all';
 let query = '';
 let previewTimer: ReturnType<typeof setTimeout> | undefined;
 let pendingDelete: PostSummary | null = null;
@@ -115,11 +137,29 @@ const fmtDate = (iso: string | null) =>
   iso ? new Date(iso).toLocaleDateString('en-GB', { day: 'numeric', month: 'short', year: 'numeric' }) : '';
 
 /* ---------- view switching ---------- */
-function showView(name: 'list' | 'editor'): void {
+function showView(name: 'list' | 'editor' | 'enquiries'): void {
   $('listView').classList.toggle('on', name === 'list');
   $('editorView').classList.toggle('on', name === 'editor');
+  $('enquiriesView').classList.toggle('on', name === 'enquiries');
+  $('topnav').querySelectorAll('button').forEach((b) =>
+    b.classList.toggle('on', b.dataset.tab === (name === 'enquiries' ? 'enquiries' : 'posts')),
+  );
   window.scrollTo(0, 0);
 }
+
+$('topnav').addEventListener('click', async (e) => {
+  const btn = (e.target as HTMLElement).closest<HTMLButtonElement>('button[data-tab]');
+  if (!btn) return;
+  if (btn.dataset.tab === 'enquiries') {
+    showView('enquiries');
+    await loadEnquiries();
+  } else {
+    if (state.dirty && !confirm('You have unsaved changes. Leave without saving?')) return;
+    state.dirty = false;
+    showView('list');
+    await loadList();
+  }
+});
 
 function showGate(): void {
   $('gate').hidden = false;
@@ -257,6 +297,122 @@ $('filters').addEventListener('click', (e) => {
   filter = btn.dataset.filter as typeof filter;
   $('filters').querySelectorAll('button').forEach((b) => b.classList.toggle('on', b === btn));
   renderList();
+});
+
+/* ---------- enquiries ---------- */
+const fmtDateTime = (iso: string) =>
+  new Date(iso).toLocaleString('en-GB', {
+    day: 'numeric', month: 'short', year: 'numeric', hour: '2-digit', minute: '2-digit',
+  });
+
+async function loadEnquiries(): Promise<void> {
+  hideError('enqError');
+  const { ok, data } = await api<{ enquiries: Enquiry[]; error?: string }>('enquiries');
+  if (!ok) {
+    showError('enqError', (data as any).error || 'Could not load enquiries.');
+    $('enqSummary').textContent = 'Unavailable.';
+    return;
+  }
+  enquiries = data.enquiries ?? [];
+  renderEnquiries();
+}
+
+function renderEnquiries(): void {
+  const fresh = enquiries.filter((q) => q.status === 'new').length;
+  const badge = $('cEnqNew');
+  badge.textContent = String(fresh);
+  badge.hidden = fresh === 0;
+
+  $('enqSummary').textContent =
+    enquiries.length === 0
+      ? 'No enquiries yet.'
+      : `${enquiries.length} enquir${enquiries.length === 1 ? 'y' : 'ies'} · ${fresh} new`;
+
+  const list = enqFilter === 'all' ? enquiries : enquiries.filter((q) => q.status === enqFilter);
+  const wrap = $('enqList');
+  wrap.innerHTML = '';
+
+  const empty = $('enqEmpty');
+  empty.hidden = list.length > 0;
+  wrap.hidden = list.length === 0;
+  if (list.length === 0) {
+    const filtered = enquiries.length > 0;
+    $('enqEmptyTitle').textContent = filtered ? 'Nothing in this status' : 'No enquiries yet';
+    $('enqEmptyBody').textContent = filtered
+      ? 'Pick a different status filter.'
+      : 'When someone sends a requirement through the website form, it appears here.';
+    return;
+  }
+
+  for (const q of list) {
+    const row = document.createElement('article');
+    row.className = 'enq-row';
+
+    const facts: Array<[string, string | null]> = [
+      ['Grade / spec', q.grade_spec],
+      ['Quantity', q.quantity_mt != null ? `${q.quantity_mt} MT` : null],
+      ['Type', q.contract_type],
+      ['Destination', q.destination],
+      ['Timeline', q.timeline],
+      ['Designation', q.designation],
+    ];
+    const factHtml = facts
+      .filter(([, v]) => v)
+      .map(([k, v]) => `<span><b>${k}:</b> ${escapeHtml(v!)}</span>`)
+      .join('');
+
+    row.innerHTML = `
+      <div class="enq-top">
+        <div>
+          <h3>${escapeHtml(q.material)} — ${escapeHtml(q.company)}</h3>
+          <p class="enq-who">
+            ${escapeHtml(q.contact_name)} ·
+            <a href="mailto:${escapeHtml(q.email)}">${escapeHtml(q.email)}</a> ·
+            <a href="tel:${escapeHtml(q.phone)}">${escapeHtml(q.phone)}</a>
+          </p>
+        </div>
+        <div class="enq-side">
+          <time>${fmtDateTime(q.created_at)}</time>
+          <select class="enq-status" data-id="${q.id}" aria-label="Enquiry status">
+            ${ENQ_STATUSES.map((s) =>
+              `<option value="${s}" ${s === q.status ? 'selected' : ''}>${s[0].toUpperCase()}${s.slice(1)}</option>`,
+            ).join('')}
+          </select>
+        </div>
+      </div>
+      ${factHtml ? `<div class="enq-facts">${factHtml}</div>` : ''}
+      ${q.message ? `<p class="enq-msg">${escapeHtml(q.message)}</p>` : ''}`;
+
+    wrap.appendChild(row);
+  }
+}
+
+$('enqFilters').addEventListener('click', (e) => {
+  const btn = (e.target as HTMLElement).closest<HTMLButtonElement>('button[data-status]');
+  if (!btn) return;
+  enqFilter = btn.dataset.status as typeof enqFilter;
+  $('enqFilters').querySelectorAll('button').forEach((b) => b.classList.toggle('on', b === btn));
+  renderEnquiries();
+});
+
+$('enqList').addEventListener('change', async (e) => {
+  const sel = (e.target as HTMLElement).closest<HTMLSelectElement>('select.enq-status');
+  if (!sel) return;
+  const id = sel.dataset.id!;
+  const status = sel.value as Enquiry['status'];
+  sel.disabled = true;
+  try {
+    const { ok, data } = await api('enquiries', { method: 'POST', body: JSON.stringify({ id, status }) });
+    if (!ok) {
+      showError('enqError', (data as any).error || 'Could not update status.');
+      return;
+    }
+    const q = enquiries.find((x) => x.id === id);
+    if (q) q.status = status;
+    renderEnquiries();
+  } finally {
+    sel.disabled = false;
+  }
 });
 
 /* ---------- delete (soft, confirmed) ---------- */
@@ -702,6 +858,13 @@ window.addEventListener('beforeunload', (e) => {
   showApp();
   showView('list');
   await loadList();
+  // Fetched at boot only for the "new enquiries" badge; errors (e.g. the
+  // table not existing yet) stay silent here and surface on the tab itself.
+  const enq = await api<{ enquiries: Enquiry[] }>('enquiries').catch(() => null);
+  if (enq?.ok) {
+    enquiries = enq.data.enquiries ?? [];
+    renderEnquiries();
+  }
 })();
 
 export {};

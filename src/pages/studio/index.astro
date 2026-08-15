@@ -41,7 +41,11 @@ Astro.response.headers.set('cache-control', 'no-store, private');
 <div class="studio" id="app">
   <header class="topbar">
     <img class="brand-logo" src="/assets/logo.png" alt="">
-    <h1>Insights Studio</h1>
+    <h1>Studio</h1>
+    <nav class="topnav" id="topnav">
+      <button data-tab="posts" class="on">Posts</button>
+      <button data-tab="enquiries">Enquiries <span class="n" id="cEnqNew" hidden>0</span></button>
+    </nav>
     <span class="spacer"></span>
     <button class="sbtn ghost" id="logout">Sign out</button>
   </header>
@@ -78,6 +82,38 @@ Astro.response.headers.set('cache-control', 'no-store, private');
         <h3 id="emptyTitle">No posts yet</h3>
         <p id="emptyBody">Write the first Industry Insights piece.</p>
         <button class="sbtn gold" id="emptyNew">New blog</button>
+      </div>
+    </div>
+  </section>
+
+  <!-- ---------------- ENQUIRIES VIEW ---------------- -->
+  <section class="view" id="enquiriesView">
+    <div class="list-wrap">
+      <div class="list-head">
+        <div>
+          <h2>RFQ Enquiries</h2>
+          <p id="enqSummary">Loading…</p>
+        </div>
+      </div>
+
+      <div class="alert" id="enqError" hidden></div>
+
+      <div class="list-controls">
+        <div class="filters" id="enqFilters" role="tablist">
+          <button data-status="all" class="on" role="tab">All</button>
+          <button data-status="new" role="tab">New</button>
+          <button data-status="contacted" role="tab">Contacted</button>
+          <button data-status="qualified" role="tab">Qualified</button>
+          <button data-status="closed" role="tab">Closed</button>
+          <button data-status="spam" role="tab">Spam</button>
+        </div>
+      </div>
+
+      <div class="enq-list" id="enqList"></div>
+
+      <div class="empty-state" id="enqEmpty" hidden>
+        <h3 id="enqEmptyTitle">No enquiries yet</h3>
+        <p id="enqEmptyBody">When someone sends a requirement through the website form, it appears here.</p>
       </div>
     </div>
   </section>

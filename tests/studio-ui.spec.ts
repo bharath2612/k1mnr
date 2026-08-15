@@ -144,3 +144,16 @@ test('a published post opens with Update and Unpublish; a draft shows neither', 
   // Regression guard: .sbtn is inline-flex, which used to defeat [hidden].
   await expect(page.locator('#unpublishBtn')).not.toBeVisible();
 });
+
+test('the Enquiries tab opens the enquiries view', async ({ page }) => {
+  await signIn(page);
+  await page.click('#topnav button[data-tab="enquiries"]');
+  await expect(page.locator('#enquiriesView')).toBeVisible();
+  await expect(page.locator('#listView')).not.toBeVisible();
+  // Until migration 0004 exists in the target DB this surfaces the DB error
+  // in #enqError; with the table present it shows rows or the empty state.
+  await expect(page.locator('#enqSummary')).not.toHaveText('Loading…');
+
+  await page.click('#topnav button[data-tab="posts"]');
+  await expect(page.locator('#listView')).toBeVisible();
+});

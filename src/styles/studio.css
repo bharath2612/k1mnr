@@ -150,6 +150,58 @@
 .save-state { font-size: 12.5px; color: var(--s-ink-3); white-space: nowrap }
 .save-state.dirty { color: var(--s-gold); font-weight: 500 }
 
+/* ============ TOPBAR TABS ============ */
+.topnav { display: flex; gap: 4px; margin-left: 18px }
+.topnav button {
+  border: none; background: transparent; cursor: pointer;
+  font-family: var(--sans); font-size: 13px; font-weight: 500;
+  color: var(--s-ink-2); padding: 7px 12px; border-radius: var(--s-radius);
+  display: inline-flex; align-items: center; gap: 7px;
+}
+.topnav button:hover { background: var(--s-bg-2); color: var(--s-ink) }
+.topnav button.on { background: var(--s-bg-3); color: var(--s-ink) }
+.topnav button .n {
+  background: var(--s-gold); color: #fff; font-size: 11px; font-weight: 600;
+  min-width: 18px; height: 18px; border-radius: 9px;
+  display: inline-grid; place-items: center; padding: 0 5px;
+  font-variant-numeric: tabular-nums;
+}
+
+/* ============ ENQUIRIES ============ */
+.enq-list { display: grid; gap: 14px }
+.enq-row {
+  border: 1px solid var(--s-line); border-radius: var(--s-radius);
+  background: var(--s-bg); box-shadow: var(--s-shadow); padding: 18px 20px;
+}
+.enq-top { display: flex; justify-content: space-between; gap: 20px; align-items: flex-start; flex-wrap: wrap }
+.enq-top h3 { font-family: var(--serif); font-weight: 400; font-size: 19px; line-height: 1.25 }
+.enq-who { font-size: 13px; color: var(--s-ink-2); margin-top: 3px }
+.enq-who a { color: var(--s-gold); text-decoration: none }
+.enq-who a:hover { text-decoration: underline }
+.enq-side { display: flex; align-items: center; gap: 12px; flex: none }
+.enq-side time { font-size: 12.5px; color: var(--s-ink-3); white-space: nowrap }
+.enq-status {
+  font-family: var(--sans); font-size: 13px; color: var(--s-ink);
+  border: 1px solid var(--s-line-2); border-radius: var(--s-radius);
+  background: var(--s-bg); padding: 6px 10px; cursor: pointer;
+}
+.enq-status:disabled { opacity: .5 }
+.enq-facts {
+  display: flex; flex-wrap: wrap; gap: 6px 18px;
+  margin-top: 12px; padding-top: 12px; border-top: 1px solid var(--s-line);
+  font-size: 13px; color: var(--s-ink-2);
+}
+.enq-facts b { color: var(--s-ink); font-weight: 500 }
+.enq-msg {
+  margin-top: 12px; padding: 10px 14px; background: var(--s-bg-2);
+  border-radius: var(--s-radius); font-size: 13.5px; color: var(--s-ink-2);
+  white-space: pre-line;
+}
+@media (max-width: 640px) {
+  .topnav { margin-left: 8px }
+  .enq-side { width: 100%; justify-content: space-between }
+}
+
 /* ============ LIST VIEW ============ */
 .view { display: none }
 .view.on { display: block }

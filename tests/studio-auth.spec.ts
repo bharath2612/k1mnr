@@ -14,6 +14,8 @@ const ROUTES: Array<{ method: 'GET' | 'POST'; path: string }> = [
   { method: 'POST', path: '/api/studio/publish' },
   { method: 'POST', path: '/api/studio/delete' },
   { method: 'POST', path: '/api/studio/upload' },
+  { method: 'GET', path: '/api/studio/enquiries' },
+  { method: 'POST', path: '/api/studio/enquiries' },
 ];
 
 const BAD_COOKIES = [
