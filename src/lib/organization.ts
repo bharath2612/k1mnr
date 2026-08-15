@@ -33,9 +33,6 @@ export const ORGANIZATION = {
   email: 'contact@k1mnr.com',
   foundingDate: '2026-07-04',
   taxID: '36ABFFK9349C1Z6',
-  founder: [
-    { '@type': 'Person', name: 'Trishneeth Korivi', jobTitle: 'Managing Partner & Designated Partner' },
-  ],
   employee: [
     { '@type': 'Person', name: 'Phani Srinivas Reddy Kurre', jobTitle: 'Chief Executive Officer' },
   ],
