@@ -51,7 +51,7 @@ export const prerender = true;
       <div>
         <p class="tag reveal">Who We Are</p>
         <h2 class="h-display section-title reveal reveal-d1">Built for the industries<br><span class="x">that cannot stop.</span></h2>
-        <p class="about-statement reveal reveal-d2">We exist to take global supply chain volatility off your balance sheet with precision-grade energy resources with absolute timeline certainty.</p>
+        <p class="about-statement reveal reveal-d2">We exist to take global supply chain volatility off your balance sheet — laycans confirmed in writing, cargoes inspected at load port, commercial terms settled before the order is placed.</p>
         <p class="lead reveal reveal-d3" style="margin-top:26px">We serve the <em>cement, steel and power</em> sectors — disciplined procurement, dependable delivery, one consignment at a time.</p>
         <div class="vm reveal reveal-d3">
           <div class="vm-card">
@@ -70,13 +70,13 @@ export const prerender = true;
         <div class="vm reveal reveal-d1">
           <div class="vm-card">
             <h3>Vision</h3>
-            <p class="vm-lead">To eliminate supply risk from industrial energy procurement.</p>
-            <p>We envision a global market where heavy industry never faces power drops, production halts, or unpredictable cost spikes due to trade bottlenecks. K ONE is setting the standard for transparent, ironclad commodity delivery across borders.</p>
+            <p class="vm-lead">To make industrial energy procurement predictable.</p>
+            <p>We envision a market where heavy industry plans production around confirmed cargoes, not around trade bottlenecks. K ONE is setting the standard for transparent, well-documented commodity delivery across borders.</p>
           </div>
           <div class="vm-card">
             <h3>Mission</h3>
-            <p class="vm-lead">To connect primary energy extraction directly to industrial execution with zero friction.</p>
-            <p>We leverage direct-from-mine access, strategic port controls, and rigorous quality inspection to deliver exact-specification coal and natural resources on time, every time, under any market condition.</p>
+            <p class="vm-lead">To connect primary energy extraction directly to industrial execution.</p>
+            <p>Direct-from-mine access, hands-on port operations, and third-party inspection at load port on every consignment — delivering exact-specification coal and natural resources with a full documentation set (BL, COA, weight and quality certificates) on every shipment.</p>
           </div>
         </div>
       </div>
@@ -129,7 +129,7 @@ export const prerender = true;
   <div class="container band-inner">
     <p class="tag reveal">Ground Operations</p>
     <h2 class="h-display section-title reveal reveal-d1">End-to-end control over <span class="x">every metric ton.</span></h2>
-    <p class="lead reveal reveal-d2">Eliminating demurrage risks and shipping bottlenecks with hands-on port management, third-party testing, and real-time cargo tracking.</p>
+    <p class="lead reveal reveal-d2">Demurrage terms agreed in writing before the order is confirmed. Laycans confirmed in writing, deviations notified within 24 hours — with hands-on port management, third-party testing, and real-time cargo tracking.</p>
   </div>
 </section>
 
@@ -228,7 +228,7 @@ export const prerender = true;
 <section class="cta-strip">
   <div class="container cta-inner">
     <h2 class="reveal">Have a requirement? Put it on schedule.</h2>
-    <a class="btn btn-carbon reveal reveal-d1" href="#contact">Contact Us
+    <a class="btn btn-carbon reveal reveal-d1" href="#rfq">Request a Quote
       <svg width="16" height="12" viewBox="0 0 16 12" fill="none"><path d="M1 6h13M10 1l5 5-5 5" stroke="currentColor" stroke-width="1.5"/></svg>
     </a>
   </div>
@@ -278,6 +278,94 @@ export const prerender = true;
         </div>
       </div>
     </div>
+    <!-- ================= RFQ FORM ================= -->
+    <div class="rfq" id="rfq">
+      <div class="rfq-head">
+        <p class="tag reveal">Request a Quote</p>
+        <h3 class="h-display reveal reveal-d1">Send your requirement.<br><span class="x">Answered within one business day.</span></h3>
+        <p class="lead reveal reveal-d2">Share the specification, volume and destination — we come back with a firm, qualified offer. Prefer to talk? Phone and WhatsApp above work just as well.</p>
+      </div>
+      <form class="rfq-form reveal" id="rfqForm" novalidate>
+        <div class="rfq-grid">
+          <label class="rfq-field">
+            <span>Material <i>*</i></span>
+            <select name="material" required>
+              <option value="" selected disabled>Select material</option>
+              <option>Thermal Coal</option>
+              <option>Imported Coal</option>
+              <option>Limestone</option>
+              <option>Dolomite</option>
+              <option>Gypsum</option>
+              <option>Iron Ore</option>
+              <option>Bauxite</option>
+              <option>Silica Sand</option>
+              <option>Fly Ash</option>
+              <option>Other / Custom Procurement</option>
+            </select>
+          </label>
+          <label class="rfq-field">
+            <span>Grade / specification</span>
+            <input type="text" name="grade_spec" placeholder="e.g. GCV 5000 GAR, ash < 8%" maxlength="500">
+          </label>
+          <label class="rfq-field">
+            <span>Quantity (MT)</span>
+            <input type="number" name="quantity_mt" min="1" step="any" placeholder="e.g. 50000">
+          </label>
+          <label class="rfq-field">
+            <span>Requirement type</span>
+            <select name="contract_type">
+              <option value="one-off" selected>One-off consignment</option>
+              <option value="recurring">Recurring supply</option>
+              <option value="annual">Annual contract</option>
+            </select>
+          </label>
+          <label class="rfq-field">
+            <span>Delivery destination</span>
+            <input type="text" name="destination" placeholder="Discharge port or plant location" maxlength="200">
+          </label>
+          <label class="rfq-field">
+            <span>Required timeline</span>
+            <input type="text" name="timeline" placeholder="e.g. laycan 15–25 Sep" maxlength="200">
+          </label>
+          <label class="rfq-field">
+            <span>Company <i>*</i></span>
+            <input type="text" name="company" required maxlength="160">
+          </label>
+          <label class="rfq-field">
+            <span>Contact name <i>*</i></span>
+            <input type="text" name="contact_name" required maxlength="120">
+          </label>
+          <label class="rfq-field">
+            <span>Designation</span>
+            <input type="text" name="designation" maxlength="120">
+          </label>
+          <label class="rfq-field">
+            <span>Phone <i>*</i></span>
+            <input type="tel" name="phone" required maxlength="30">
+          </label>
+          <label class="rfq-field">
+            <span>Work email <i>*</i></span>
+            <input type="email" name="email" required maxlength="200">
+          </label>
+          <label class="rfq-field rfq-wide">
+            <span>Anything else we should know</span>
+            <textarea name="message" rows="4" maxlength="3000" placeholder="Existing spec sheet details, tender reference, preferred origin…"></textarea>
+          </label>
+          <!-- Honeypot: humans never see this; bots that fill it are dropped. -->
+          <label class="rfq-hp" aria-hidden="true">
+            <span>Website</span>
+            <input type="text" name="website" tabindex="-1" autocomplete="off">
+          </label>
+        </div>
+        <div class="rfq-actions">
+          <button class="btn btn-ember" type="submit" id="rfqSubmit">Send Enquiry
+            <svg width="16" height="12" viewBox="0 0 16 12" fill="none"><path d="M1 6h13M10 1l5 5-5 5" stroke="currentColor" stroke-width="1.5"/></svg>
+          </button>
+          <p class="rfq-status" id="rfqStatus" role="status" aria-live="polite"></p>
+        </div>
+      </form>
+    </div>
+
     <div class="map-wrap reveal">
       <iframe title="K One Minerals — Registered Office, Madhapur, Hyderabad" loading="lazy" referrerpolicy="no-referrer-when-downgrade" src="https://www.google.com/maps?q=17.4358540,78.3945201&z=17&output=embed"></iframe>
     </div>
@@ -285,4 +373,51 @@ export const prerender = true;
 </section>
 
 <!-- ================= FOOTER ================= -->
+
+<script is:inline>
+(function(){
+  "use strict";
+  var form = document.getElementById("rfqForm");
+  if(!form) return;
+  var status = document.getElementById("rfqStatus");
+  var submit = document.getElementById("rfqSubmit");
+
+  form.addEventListener("submit", function(e){
+    e.preventDefault();
+    if(!form.reportValidity()) return;
+
+    var data = {};
+    new FormData(form).forEach(function(v, k){ data[k] = v; });
+
+    submit.disabled = true;
+    status.className = "rfq-status";
+    status.textContent = "Sending…";
+
+    fetch("/api/rfq", {
+      method: "POST",
+      headers: {"Content-Type": "application/json"},
+      body: JSON.stringify(data)
+    }).then(function(res){
+      return res.json().then(function(body){ return {ok: res.ok, body: body}; });
+    }).then(function(r){
+      if(r.ok){
+        form.reset();
+        status.classList.add("ok");
+        status.textContent = "Received — we will come back to you within one business day.";
+      } else {
+        status.classList.add("err");
+        var fields = r.body && r.body.fields;
+        status.textContent = (fields && fields[Object.keys(fields)[0]]) ||
+          (r.body && r.body.error) ||
+          "Something went wrong. Please email or call us instead.";
+        submit.disabled = false;
+      }
+    }).catch(function(){
+      status.classList.add("err");
+      status.textContent = "Network error — please email contact@k1mnr.com or call us.";
+      submit.disabled = false;
+    });
+  });
+})();
+</script>
 </Base>

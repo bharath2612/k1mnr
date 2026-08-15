@@ -456,6 +456,47 @@ body::before{
   .connect-card{padding:36px 26px}
 }
 
+/* ============ RFQ FORM ============ */
+.rfq{margin-top:86px;border:1px solid rgba(91,106,95,.35);background:var(--forest-2);padding:56px 52px 50px;scroll-margin-top:90px}
+.rfq-head h3{font-size:clamp(25px,3vw,40px);color:var(--paper);max-width:24ch}
+.rfq-head h3 .x{color:var(--gold);font-style:italic}
+.rfq-head .lead{margin-top:18px}
+.rfq-form{margin-top:44px}
+.rfq-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:26px 28px}
+.rfq-field{display:flex;flex-direction:column;gap:9px;min-width:0}
+.rfq-field span{
+  font-family:var(--sans);font-size:12.5px;font-weight:500;letter-spacing:.03em;
+  color:var(--silver-dim);text-transform:uppercase;
+}
+.rfq-field span i{color:var(--gold);font-style:normal}
+.rfq-field input,.rfq-field select,.rfq-field textarea{
+  font-family:var(--sans);font-size:15px;font-weight:300;color:var(--paper);
+  background:var(--forest);border:1px solid var(--line-dark);
+  padding:13px 15px;outline:none;border-radius:0;width:100%;
+  transition:border-color .3s;appearance:none;-webkit-appearance:none;
+}
+.rfq-field select{
+  background-image:url("data:image/svg+xml,%3Csvg width='10' height='6' viewBox='0 0 10 6' xmlns='http://www.w3.org/2000/svg'%3E%3Cpath d='M1 1l4 4 4-4' stroke='%23878D83' fill='none' stroke-width='1.5'/%3E%3C/svg%3E");
+  background-repeat:no-repeat;background-position:right 15px center;padding-right:38px;
+}
+.rfq-field select:invalid{color:var(--silver-dim)}
+.rfq-field select option{color:var(--paper);background:var(--forest)}
+.rfq-field textarea{resize:vertical;min-height:96px}
+.rfq-field input::placeholder,.rfq-field textarea::placeholder{color:var(--silver-dim);opacity:.75}
+.rfq-field input:focus,.rfq-field select:focus,.rfq-field textarea:focus{border-color:var(--gold)}
+.rfq-wide{grid-column:1/-1}
+.rfq-hp{position:absolute!important;left:-9999px;width:1px;height:1px;overflow:hidden}
+.rfq-actions{display:flex;align-items:center;gap:26px;margin-top:36px;flex-wrap:wrap}
+.rfq-actions .btn:disabled{opacity:.55;cursor:default;transform:none}
+.rfq-status{font-size:14.5px;font-weight:300;color:var(--silver)}
+.rfq-status.ok{color:var(--gold-hi)}
+.rfq-status.err{color:#D98A7A}
+@media(max-width:960px){.rfq-grid{grid-template-columns:repeat(2,1fr)}}
+@media(max-width:700px){
+  .rfq{padding:38px 24px 36px;margin-top:60px}
+  .rfq-grid{grid-template-columns:1fr}
+}
+
 /* ============ MAP ============ */
 .map-wrap{margin-top:86px;border:1px solid var(--line-dark);position:relative}
 .map-wrap iframe{
@@ -474,6 +515,11 @@ footer{background:var(--forest-deep);color:var(--silver-dim);padding:76px 0 38px
 .foot-col li{margin-bottom:11px}
 .foot-col a{font-size:14.5px;font-weight:300;color:var(--silver);transition:color .3s}
 .foot-col a:hover{color:var(--gold-hi)}
+.foot-legal{
+  display:flex;gap:26px;flex-wrap:wrap;
+  padding-top:26px;font-size:13px;font-weight:300;color:var(--silver-dim);
+  letter-spacing:.02em;
+}
 .foot-base{
   display:flex;justify-content:space-between;align-items:center;gap:20px;
   padding-top:30px;font-size:13px;font-weight:300;flex-wrap:wrap;

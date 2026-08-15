@@ -62,6 +62,10 @@ export default defineConfig({
       STUDIO_PASSCODE: envField.string({ context: 'server', access: 'secret' }),
       STUDIO_SECRET: envField.string({ context: 'server', access: 'secret' }),
       VERCEL_BYPASS_TOKEN: envField.string({ context: 'server', access: 'secret', optional: true }),
+      // Optional: enables RFQ email notifications (to K One + auto-ack to the
+      // enquirer). The enquiry is persisted either way; without this key the
+      // mails are silently skipped.
+      RESEND_API_KEY: envField.string({ context: 'server', access: 'secret', optional: true }),
     },
     validateSecrets: true,
   },
