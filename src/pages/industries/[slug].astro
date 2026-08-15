@@ -1,0 +1,69 @@
+---
+import Base from '../../layouts/Base.astro';
+import { INDUSTRIES, productBySlug } from '../../lib/catalog';
+import { absoluteUrl } from '../../lib/organization';
+import '../../styles/catalog.css';
+
+export const prerender = true;
+
+export function getStaticPaths() {
+  return INDUSTRIES.map((industry) => ({ params: { slug: industry.slug }, props: { industry } }));
+}
+
+const { industry } = Astro.props;
+const path = `/industries/${industry.slug}`;
+
+const inputs = industry.inputs
+  .map((input) => ({ ...input, product: productBySlug(input.slug) }))
+  .filter((input) => input.product);
+
+const jsonld = [
+  {
+    '@context': 'https://schema.org',
+    '@type': 'BreadcrumbList',
+    itemListElement: [
+      { '@type': 'ListItem', position: 1, name: 'Home', item: absoluteUrl('/') },
+      { '@type': 'ListItem', position: 2, name: 'Industries', item: absoluteUrl('/industries') },
+      { '@type': 'ListItem', position: 3, name: industry.name, item: absoluteUrl(path) },
+    ],
+  },
+];
+---
+
+<Base title={industry.seoTitle} description={industry.seoDescription} path={path} solidNav jsonld={jsonld}>
+  <section class="cat-head light">
+    <div class="container">
+      <nav class="cat-crumbs" aria-label="Breadcrumb">
+        <span><a href="/">Home</a></span><span><a href="/industries">Industries</a></span><span>{industry.name}</span>
+      </nav>
+      <p class="tag reveal">Industries We Serve</p>
+      <h1 class="h-display section-title reveal reveal-d1">{industry.name}</h1>
+      <p class="lead reveal reveal-d2">{industry.blurb}</p>
+    </div>
+  </section>
+
+  <section class="cat-body light">
+    <div class="container">
+      {industry.description.map((para) => <p class="reveal">{para}</p>)}
+
+      <div class="spec-block reveal">
+        <h2>The input basket we cover</h2>
+        <ul class="input-list">
+          {inputs.map((input) => (
+            <li>
+              <a href={`/products/${input.slug}`}>{input.product!.name}</a>
+              <p>{input.role}</p>
+            </li>
+          ))}
+        </ul>
+      </div>
+
+      <div class="cat-cta reveal">
+        <h2>Running a {industry.name.toLowerCase()} programme? <span class="x">Put it on schedule.</span></h2>
+        <a class="btn btn-ember" href="/#rfq">Request a Quote
+          <svg width="16" height="12" viewBox="0 0 16 12" fill="none"><path d="M1 6h13M10 1l5 5-5 5" stroke="currentColor" stroke-width="1.5"/></svg>
+        </a>
+      </div>
+    </div>
+  </section>
+</Base>

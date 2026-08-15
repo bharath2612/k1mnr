@@ -1,6 +1,6 @@
 ---
 import Base from '../layouts/Base.astro';
-import { ORGANIZATION_JSONLD } from '../lib/organization';
+import { ORGANIZATION_JSONLD, LOCALBUSINESS_JSONLD } from '../lib/organization';
 
 // Homepage is fully prerendered at build time: it must never depend on
 // Supabase being reachable.
@@ -13,7 +13,7 @@ export const prerender = true;
   keywords="thermal coal supply, metallurgical coal, coal trading, port logistics, commodity trading, industrial minerals, limestone, dolomite, iron ore, procurement services, Hyderabad, India"
   path="/"
   ogType="website"
-  jsonld={[ORGANIZATION_JSONLD]}
+  jsonld={[ORGANIZATION_JSONLD, LOCALBUSINESS_JSONLD]}
 >
 
 <!-- ================= HERO ================= -->
@@ -99,13 +99,13 @@ export const prerender = true;
         <span class="product-num">Energy</span>
         <h3>Coal</h3>
         <p>Consistent-quality fuel supply for power generation and industrial heating, sourced domestically and through established import channels.</p>
-        <ul class="product-tags"><li>Thermal Coal</li><li>Imported Coal</li><li>Industrial Fuel</li></ul>
+        <ul class="product-tags"><li><a href="/products/thermal-coal">Thermal Coal</a></li><li><a href="/products/imported-coal">Imported Coal</a></li><li>Industrial Fuel</li></ul>
       </article>
       <article class="product-card reveal reveal-d1">
         <span class="product-num">Minerals</span>
         <h3>Industrial Minerals</h3>
         <p>Bulk mineral supply with verified grades and clean documentation for cement, steel, glass and processing applications.</p>
-        <ul class="product-tags"><li>Limestone</li><li>Dolomite</li><li>Gypsum</li><li>Iron Ore</li><li>Bauxite</li><li>Silica Sand</li><li>Fly Ash</li></ul>
+        <ul class="product-tags"><li><a href="/products/limestone">Limestone</a></li><li><a href="/products/dolomite">Dolomite</a></li><li><a href="/products/gypsum">Gypsum</a></li><li><a href="/products/iron-ore">Iron Ore</a></li><li><a href="/products/bauxite">Bauxite</a></li><li><a href="/products/silica-sand">Silica Sand</a></li><li><a href="/products/fly-ash">Fly Ash</a></li></ul>
       </article>
       <article class="product-card reveal reveal-d2">
         <span class="product-num">Materials</span>
@@ -139,9 +139,9 @@ export const prerender = true;
     <p class="tag reveal">Industries We Serve</p>
     <h2 class="h-display section-title reveal reveal-d1">Industries powered <span class="x">by K One.</span></h2>
     <div class="ind-grid">
-      <div class="ind-cell reveal"><i>01</i><h3>Cement</h3><p>Limestone, gypsum, fly ash and fuel — the full input basket for clinker and grinding units.</p></div>
-      <div class="ind-cell reveal reveal-d1"><i>02</i><h3>Steel</h3><p>Iron ore, dolomite and reductants supplied to demanding metallurgical specifications.</p></div>
-      <div class="ind-cell reveal reveal-d2"><i>03</i><h3>Power Generation</h3><p>Thermal and imported coal on dependable delivery schedules for uninterrupted generation.</p></div>
+      <a class="ind-cell reveal" href="/industries/cement"><i>01</i><h3>Cement</h3><p>Limestone, gypsum, fly ash and fuel — the full input basket for clinker and grinding units.</p></a>
+      <a class="ind-cell reveal reveal-d1" href="/industries/steel"><i>02</i><h3>Steel</h3><p>Iron ore, dolomite and reductants supplied to demanding metallurgical specifications.</p></a>
+      <a class="ind-cell reveal reveal-d2" href="/industries/power"><i>03</i><h3>Power Generation</h3><p>Thermal and imported coal on dependable delivery schedules for uninterrupted generation.</p></a>
     </div>
   </div>
 </section>

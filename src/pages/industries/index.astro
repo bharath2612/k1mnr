@@ -1,0 +1,77 @@
+---
+import Base from '../../layouts/Base.astro';
+import { INDUSTRIES } from '../../lib/catalog';
+import { ORGANIZATION, absoluteUrl } from '../../lib/organization';
+import '../../styles/catalog.css';
+
+export const prerender = true;
+
+const title = 'Industries We Serve — Cement, Steel & Power | K One Minerals';
+const description =
+  'Raw material and fuel supply programmes for cement plants, steel plants and power generators — one accountable procurement partner across the input basket.';
+
+const jsonld = [
+  {
+    '@context': 'https://schema.org',
+    '@type': 'CollectionPage',
+    name: 'Industries We Serve',
+    description,
+    url: absoluteUrl('/industries'),
+    publisher: ORGANIZATION,
+    mainEntity: {
+      '@type': 'ItemList',
+      itemListElement: INDUSTRIES.map((ind, i) => ({
+        '@type': 'ListItem',
+        position: i + 1,
+        url: absoluteUrl(`/industries/${ind.slug}`),
+        name: ind.name,
+      })),
+    },
+  },
+  {
+    '@context': 'https://schema.org',
+    '@type': 'BreadcrumbList',
+    itemListElement: [
+      { '@type': 'ListItem', position: 1, name: 'Home', item: absoluteUrl('/') },
+      { '@type': 'ListItem', position: 2, name: 'Industries', item: absoluteUrl('/industries') },
+    ],
+  },
+];
+---
+
+<Base title={title} description={description} path="/industries" solidNav jsonld={jsonld}>
+  <section class="cat-head light">
+    <div class="container">
+      <nav class="cat-crumbs" aria-label="Breadcrumb">
+        <span><a href="/">Home</a></span><span>Industries</span>
+      </nav>
+      <h1 class="h-display section-title reveal">Industries powered <span class="x">by K One.</span></h1>
+      <p class="lead reveal reveal-d1">
+        Cement, steel and power run on materials that arrive to specification, on schedule.
+        Each programme below covers the full input basket for its industry.
+      </p>
+    </div>
+  </section>
+
+  <section class="cat-body light">
+    <div class="container">
+      <div class="cat-grid">
+        {INDUSTRIES.map((ind, i) => (
+          <a class="cat-card reveal" href={`/industries/${ind.slug}`}>
+            <i>{String(i + 1).padStart(2, '0')}</i>
+            <h3>{ind.name}</h3>
+            <p>{ind.blurb}</p>
+            <span class="cat-more">View supply programme →</span>
+          </a>
+        ))}
+      </div>
+
+      <div class="cat-cta reveal">
+        <h2>A different industry? <span class="x">Custom procurement is what we do.</span></h2>
+        <a class="btn btn-ember" href="/#rfq">Request a Quote
+          <svg width="16" height="12" viewBox="0 0 16 12" fill="none"><path d="M1 6h13M10 1l5 5-5 5" stroke="currentColor" stroke-width="1.5"/></svg>
+        </a>
+      </div>
+    </div>
+  </section>
+</Base>

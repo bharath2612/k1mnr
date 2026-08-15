@@ -112,3 +112,78 @@ test.describe('feeds', () => {
     expect(xml).not.toContain(DRAFT_SLUG);
   });
 });
+
+test.describe('catalog pages', () => {
+  test('product page renders specs, canonical and breadcrumbs server-side', async ({ request }) => {
+    const res = await request.get('/products/imported-coal');
+    expect(res.status()).toBe(200);
+    const html = await res.text();
+    expect(html).toContain('<link rel="canonical" href="https://k1mnr.com/products/imported-coal">');
+    expect(html).toContain('Typical specification ranges by origin');
+    expect(html).toContain('BreadcrumbList');
+    // The disclaimer is the legal counterweight to publishing spec numbers.
+    expect(html).toContain('typical and indicative');
+  });
+
+  test('every catalog route resolves with a unique title', async ({ request }) => {
+    const routes = [
+      '/products', '/industries',
+      '/products/thermal-coal', '/products/limestone', '/products/fly-ash',
+      '/industries/cement', '/industries/steel', '/industries/power',
+    ];
+    const titles = new Set<string>();
+    for (const route of routes) {
+      const res = await request.get(route);
+      expect(res.status(), route).toBe(200);
+      const m = (await res.text()).match(/<title>([^<]+)<\/title>/);
+      expect(m, route).not.toBeNull();
+      titles.add(m![1]);
+    }
+    expect(titles.size).toBe(routes.length);
+  });
+
+  test('an unknown product slug 404s', async ({ request }) => {
+    expect((await request.get('/products/unobtainium')).status()).toBe(404);
+  });
+
+  test('sitemap includes the catalog routes', async ({ request }) => {
+    const xml = await (await request.get('/sitemap.xml')).text();
+    expect(xml).toContain('<loc>https://k1mnr.com/products/imported-coal</loc>');
+    expect(xml).toContain('<loc>https://k1mnr.com/industries/cement</loc>');
+  });
+});
+
+test.describe('rfq api', () => {
+  test('rejects an empty submission with field errors', async ({ request }) => {
+    const res = await request.post('/api/rfq', { data: {} });
+    expect(res.status()).toBe(400);
+    const body = await res.json();
+    expect(body.fields).toHaveProperty('material');
+    expect(body.fields).toHaveProperty('email');
+  });
+
+  test('honeypot submissions get a 200 and are dropped before any DB work', async ({ request }) => {
+    const res = await request.post('/api/rfq', {
+      data: { website: 'spam-bot-was-here', material: 'x', email: 'not-an-email' },
+    });
+    expect(res.status()).toBe(200);
+    expect(await res.json()).toEqual({ ok: true });
+  });
+
+  test('rejects a non-JSON body', async ({ request }) => {
+    const res = await request.post('/api/rfq', {
+      headers: { 'content-type': 'application/json' },
+      data: 'not json{{',
+    });
+    expect(res.status()).toBe(400);
+  });
+
+  test('homepage renders the RFQ form with honeypot present but hidden', async ({ page }) => {
+    await page.goto('/');
+    await expect(page.locator('#rfqForm')).toHaveCount(1);
+    // The honeypot is positioned off-screen rather than display:none, so
+    // naive bots still fill it; assert it is out of the viewport, not hidden.
+    await expect(page.locator('#rfqForm [name="website"]')).not.toBeInViewport();
+    await expect(page.locator('#rfqForm [name="material"]')).toBeVisible();
+  });
+});

@@ -1,6 +1,7 @@
 import type { APIRoute } from 'astro';
 import { listPublishedForFeed } from '../lib/posts';
 import { absoluteUrl } from '../lib/organization';
+import { PRODUCTS, INDUSTRIES } from '../lib/catalog';
 
 /**
  * Built at request time, not build time.
@@ -19,6 +20,18 @@ export const GET: APIRoute = async () => {
 
   const staticEntries = [
     { loc: absoluteUrl('/'), priority: '1.0', changefreq: 'monthly' },
+    { loc: absoluteUrl('/products'), priority: '0.9', changefreq: 'monthly' },
+    ...PRODUCTS.map((p) => ({
+      loc: absoluteUrl(`/products/${p.slug}`),
+      priority: '0.8',
+      changefreq: 'monthly',
+    })),
+    { loc: absoluteUrl('/industries'), priority: '0.8', changefreq: 'monthly' },
+    ...INDUSTRIES.map((ind) => ({
+      loc: absoluteUrl(`/industries/${ind.slug}`),
+      priority: '0.7',
+      changefreq: 'monthly',
+    })),
     { loc: absoluteUrl('/insights'), priority: '0.8', changefreq: 'weekly' },
   ];
 

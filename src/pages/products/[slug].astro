@@ -1,0 +1,104 @@
+---
+import Base from '../../layouts/Base.astro';
+import { PRODUCTS, INDUSTRIES } from '../../lib/catalog';
+import { ORGANIZATION, absoluteUrl } from '../../lib/organization';
+import '../../styles/catalog.css';
+
+export const prerender = true;
+
+export function getStaticPaths() {
+  return PRODUCTS.map((product) => ({ params: { slug: product.slug }, props: { product } }));
+}
+
+const { product } = Astro.props;
+const path = `/products/${product.slug}`;
+
+const served = INDUSTRIES.filter((i) => product.industries.includes(i.slug));
+
+const jsonld = [
+  {
+    '@context': 'https://schema.org',
+    '@type': 'Product',
+    name: product.name,
+    description: product.seoDescription,
+    url: absoluteUrl(path),
+    category: product.category,
+    brand: ORGANIZATION,
+  },
+  {
+    '@context': 'https://schema.org',
+    '@type': 'BreadcrumbList',
+    itemListElement: [
+      { '@type': 'ListItem', position: 1, name: 'Home', item: absoluteUrl('/') },
+      { '@type': 'ListItem', position: 2, name: 'Products', item: absoluteUrl('/products') },
+      { '@type': 'ListItem', position: 3, name: product.name, item: absoluteUrl(path) },
+    ],
+  },
+];
+---
+
+<Base title={product.seoTitle} description={product.seoDescription} path={path} solidNav jsonld={jsonld}>
+  <section class="cat-head light">
+    <div class="container">
+      <nav class="cat-crumbs" aria-label="Breadcrumb">
+        <span><a href="/">Home</a></span><span><a href="/products">Products</a></span><span>{product.name}</span>
+      </nav>
+      <p class="tag reveal">{product.category}</p>
+      <h1 class="h-display section-title reveal reveal-d1">{product.name}</h1>
+      <p class="lead reveal reveal-d2">{product.blurb}</p>
+    </div>
+  </section>
+
+  <section class="cat-body light">
+    <div class="container">
+      {product.description.map((para) => <p class="reveal">{para}</p>)}
+
+      <div class="spec-block reveal">
+        <h2>Specifications</h2>
+        <div class="spec-scroll">
+          <table class="spec-table">
+            <caption>{product.specs.caption}</caption>
+            <thead>
+              <tr>{product.specs.head.map((h) => <th scope="col">{h}</th>)}</tr>
+            </thead>
+            <tbody>
+              {product.specs.rows.map((row) => (
+                <tr>
+                  <th scope="row">{row[0]}</th>
+                  {row.slice(1).map((cell) => <td>{cell}</td>)}
+                </tr>
+              ))}
+            </tbody>
+          </table>
+        </div>
+        <p class="spec-note">
+          Ranges shown are typical and indicative. The specification for your consignment is agreed in
+          writing before order confirmation and verified by the certificate of analysis that accompanies
+          every shipment.
+        </p>
+      </div>
+
+      <dl class="cat-facts reveal">
+        <div><dt>Sourcing</dt><dd>{product.origins}</dd></div>
+        <div><dt>Lot sizes</dt><dd>{product.lotSizes}</dd></div>
+        <div><dt>Delivery</dt><dd>{product.delivery}</dd></div>
+      </dl>
+
+      {served.length > 0 && (
+        <div class="spec-block reveal">
+          <h2>Industries served</h2>
+          <div class="cat-links">
+            {served.map((i) => <a href={`/industries/${i.slug}`}>{i.name}</a>)}
+          </div>
+        </div>
+      )}
+
+      <div class="cat-cta reveal">
+        <h2>Have a {product.name.toLowerCase()} requirement? <span class="x">Put it on schedule.</span></h2>
+        <a class="btn btn-ember" href="/#rfq">Request a Quote
+          <svg width="16" height="12" viewBox="0 0 16 12" fill="none"><path d="M1 6h13M10 1l5 5-5 5" stroke="currentColor" stroke-width="1.5"/></svg>
+        </a>
+      </div>
+    </div>
+  </section>
+</Base>

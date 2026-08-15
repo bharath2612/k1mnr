@@ -1,0 +1,77 @@
+---
+import Base from '../../layouts/Base.astro';
+import { PRODUCTS } from '../../lib/catalog';
+import { ORGANIZATION, absoluteUrl } from '../../lib/organization';
+import '../../styles/catalog.css';
+
+export const prerender = true;
+
+const title = 'Products — Coal & Industrial Minerals with Published Specifications | K One Minerals';
+const description =
+  'Thermal and imported coal, limestone, dolomite, gypsum, iron ore, bauxite, silica sand and fly ash — each with typical specifications, lot sizes and delivery modes.';
+
+const jsonld = [
+  {
+    '@context': 'https://schema.org',
+    '@type': 'CollectionPage',
+    name: 'Products',
+    description,
+    url: absoluteUrl('/products'),
+    publisher: ORGANIZATION,
+    mainEntity: {
+      '@type': 'ItemList',
+      itemListElement: PRODUCTS.map((p, i) => ({
+        '@type': 'ListItem',
+        position: i + 1,
+        url: absoluteUrl(`/products/${p.slug}`),
+        name: p.name,
+      })),
+    },
+  },
+  {
+    '@context': 'https://schema.org',
+    '@type': 'BreadcrumbList',
+    itemListElement: [
+      { '@type': 'ListItem', position: 1, name: 'Home', item: absoluteUrl('/') },
+      { '@type': 'ListItem', position: 2, name: 'Products', item: absoluteUrl('/products') },
+    ],
+  },
+];
+---
+
+<Base title={title} description={description} path="/products" solidNav jsonld={jsonld}>
+  <section class="cat-head light">
+    <div class="container">
+      <nav class="cat-crumbs" aria-label="Breadcrumb">
+        <span><a href="/">Home</a></span><span>Products</span>
+      </nav>
+      <h1 class="h-display section-title reveal">The materials that <span class="x">move industry.</span></h1>
+      <p class="lead reveal reveal-d1">
+        Every product below carries its typical specification, lot sizes and delivery mode —
+        so your quality department can qualify us before the first call.
+      </p>
+    </div>
+  </section>
+
+  <section class="cat-body light">
+    <div class="container">
+      <div class="cat-grid">
+        {PRODUCTS.map((p) => (
+          <a class="cat-card reveal" href={`/products/${p.slug}`}>
+            <i>{p.category}</i>
+            <h3>{p.name}</h3>
+            <p>{p.blurb}</p>
+            <span class="cat-more">View specifications →</span>
+          </a>
+        ))}
+      </div>
+
+      <div class="cat-cta reveal">
+        <h2>Need a grade you don't see here? <span class="x">We source to specification.</span></h2>
+        <a class="btn btn-ember" href="/#rfq">Request a Quote
+          <svg width="16" height="12" viewBox="0 0 16 12" fill="none"><path d="M1 6h13M10 1l5 5-5 5" stroke="currentColor" stroke-width="1.5"/></svg>
+        </a>
+      </div>
+    </div>
+  </section>
+</Base>

@@ -55,6 +55,32 @@ export const ORGANIZATION_JSONLD = {
 };
 
 /**
+ * LocalBusiness complements Organization for local/regional search. Statutory
+ * identifiers flow in automatically once REGISTRATION has values.
+ */
+export const LOCALBUSINESS_JSONLD = {
+  '@context': 'https://schema.org',
+  '@type': 'LocalBusiness',
+  '@id': `${SITE_URL}/#business`,
+  name: SITE_NAME,
+  url: SITE_URL,
+  image: `${SITE_URL}/assets/logo.png`,
+  telephone: ORGANIZATION.telephone,
+  email: ORGANIZATION.email,
+  address: ORGANIZATION.address,
+  geo: ORGANIZATION.location.geo,
+  hasMap: ORGANIZATION.location.hasMap,
+  sameAs: ORGANIZATION.sameAs,
+  ...(REGISTRATION.length > 0 && {
+    identifier: REGISTRATION.map((r) => ({
+      '@type': 'PropertyValue',
+      name: r.label,
+      value: r.value,
+    })),
+  }),
+};
+
+/**
  * Build an absolute, canonical URL. Single helper so canonical tags, OG tags,
  * the sitemap and the RSS feed can never disagree about trailing slashes.
  */

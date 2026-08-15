@@ -1,0 +1,209 @@
+/* ===========================================================================
+   Product & industry pages (/products/*, /industries/*).
+
+   These are marketing pages, so unlike the white editorial Insights surface
+   they stay on the site's paper tone and reuse the global .light treatment
+   (.tag, .section-title, .lead all recolour themselves). Only page-specific
+   structure lives here.
+   =========================================================================== */
+
+.cat-head {
+  padding: 152px 0 56px;
+  background: var(--paper);
+}
+.cat-head .lead { margin-top: 20px }
+
+.cat-crumbs {
+  display: flex;
+  gap: 10px;
+  flex-wrap: wrap;
+  font-size: 13px;
+  font-weight: 300;
+  color: var(--ink-2);
+  margin-bottom: 26px;
+}
+.cat-crumbs a { color: var(--gold-deep) }
+.cat-crumbs a:hover { text-decoration: underline }
+.cat-crumbs span::before { content: "/"; margin-right: 10px; opacity: .45 }
+.cat-crumbs span:first-child::before { content: none }
+
+.cat-body {
+  background: var(--paper);
+  padding: 0 0 110px;
+}
+.cat-body .container > p {
+  font-size: 16px;
+  line-height: 1.8;
+  color: var(--ink-2);
+  max-width: 68ch;
+  font-weight: 300;
+  margin-bottom: 18px;
+}
+
+/* ---- listing grids -------------------------------------------------------- */
+.cat-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 1px;
+  background: var(--line-light);
+  border: 1px solid var(--line-light);
+  margin-top: 14px;
+}
+.cat-card {
+  background: var(--paper);
+  padding: 34px 30px 32px;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  transition: background .35s;
+}
+.cat-card:hover { background: var(--paper-2) }
+.cat-card i {
+  font-family: var(--serif);
+  font-style: italic;
+  font-size: 15px;
+  color: var(--gold-deep);
+}
+.cat-card h3 {
+  font-family: var(--serif);
+  font-weight: 400;
+  font-size: 24px;
+  letter-spacing: -.01em;
+  color: var(--ink);
+}
+.cat-card:hover h3 { color: var(--gold-deep) }
+.cat-card p { font-size: 14.5px; color: var(--ink-2); line-height: 1.7; font-weight: 300 }
+.cat-card .cat-more { margin-top: auto; padding-top: 14px; font-size: 13.5px; color: var(--gold-deep) }
+@media (max-width: 960px) { .cat-grid { grid-template-columns: repeat(2, 1fr) } }
+@media (max-width: 600px) { .cat-grid { grid-template-columns: 1fr } }
+
+/* ---- spec table ------------------------------------------------------------ */
+.spec-block { margin: 42px 0 8px }
+.spec-block h2, .cat-section-title {
+  font-family: var(--serif);
+  font-weight: 400;
+  font-size: 26px;
+  letter-spacing: -.01em;
+  color: var(--ink);
+  margin-bottom: 18px;
+}
+.spec-scroll { overflow-x: auto; border: 1px solid var(--line-light) }
+.spec-table {
+  width: 100%;
+  border-collapse: collapse;
+  background: #FFFFFF;
+  font-size: 14.5px;
+  min-width: 520px;
+}
+.spec-table caption {
+  caption-side: top;
+  text-align: left;
+  font-family: var(--serif);
+  font-style: italic;
+  font-size: 15px;
+  color: var(--gold-deep);
+  padding: 16px 18px 12px;
+  background: var(--paper);
+  border-bottom: 1px solid var(--line-light);
+}
+.spec-table th, .spec-table td {
+  text-align: left;
+  padding: 13px 18px;
+  border-bottom: 1px solid var(--line-light);
+  color: var(--ink-2);
+  font-weight: 300;
+}
+.spec-table thead th {
+  font-family: var(--sans);
+  font-size: 12.5px;
+  font-weight: 500;
+  letter-spacing: .04em;
+  text-transform: uppercase;
+  color: var(--ink);
+  background: var(--paper-2);
+}
+.spec-table tbody th { color: var(--ink); font-weight: 500 }
+.spec-table tr:last-child td, .spec-table tr:last-child th { border-bottom: none }
+.spec-note {
+  font-size: 13px;
+  color: var(--ink-2);
+  opacity: .8;
+  margin-top: 12px;
+  max-width: 72ch;
+  font-weight: 300;
+}
+
+/* ---- fact rows -------------------------------------------------------------- */
+.cat-facts { margin: 40px 0 0; border-top: 1px solid var(--ink) }
+.cat-facts div {
+  display: grid;
+  grid-template-columns: 200px 1fr;
+  gap: 24px;
+  padding: 18px 2px;
+  border-bottom: 1px solid var(--line-light);
+}
+.cat-facts dt {
+  font-family: var(--sans);
+  font-size: 12.5px;
+  font-weight: 500;
+  letter-spacing: .04em;
+  text-transform: uppercase;
+  color: var(--ink);
+  padding-top: 2px;
+}
+.cat-facts dd { font-size: 15px; color: var(--ink-2); font-weight: 300; line-height: 1.7 }
+@media (max-width: 640px) { .cat-facts div { grid-template-columns: 1fr; gap: 6px } }
+
+/* ---- related links ----------------------------------------------------------- */
+.cat-links { display: flex; flex-wrap: wrap; gap: 10px; margin-top: 18px }
+.cat-links a {
+  font-family: var(--sans);
+  font-size: 13.5px;
+  color: var(--ink);
+  border: 1px solid rgba(17, 28, 22, .24);
+  padding: 9px 16px;
+  transition: background .3s, color .3s, border-color .3s;
+}
+.cat-links a:hover { background: var(--forest); color: var(--gold-hi); border-color: var(--forest) }
+
+/* ---- input list (industry pages) ---------------------------------------------- */
+.input-list { border-top: 1px solid var(--ink); margin-top: 14px }
+.input-list li {
+  display: grid;
+  grid-template-columns: 220px 1fr;
+  gap: 24px;
+  padding: 20px 2px;
+  border-bottom: 1px solid var(--line-light);
+  align-items: baseline;
+}
+.input-list a {
+  font-family: var(--serif);
+  font-size: 19px;
+  color: var(--ink);
+  transition: color .3s;
+}
+.input-list a:hover { color: var(--gold-deep) }
+.input-list p { font-size: 14.5px; color: var(--ink-2); font-weight: 300 }
+@media (max-width: 640px) { .input-list li { grid-template-columns: 1fr; gap: 4px } }
+
+/* ---- bottom CTA ------------------------------------------------------------------ */
+.cat-cta {
+  margin-top: 64px;
+  background: var(--forest);
+  padding: 44px 42px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 32px;
+  flex-wrap: wrap;
+}
+.cat-cta h2 {
+  font-family: var(--serif);
+  font-weight: 400;
+  font-size: clamp(22px, 2.6vw, 32px);
+  color: var(--paper);
+  letter-spacing: -.01em;
+  max-width: 24ch;
+}
+.cat-cta h2 .x { color: var(--gold); font-style: italic }
+@media (max-width: 700px) { .cat-cta { padding: 34px 26px } }
