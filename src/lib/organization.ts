@@ -10,31 +10,43 @@ export const SITE_NAME = 'K One Minerals & Natural Resources LLP';
 
 /**
  * Statutory identifiers — standard credibility markers for Indian industrial
- * B2B. Values must come from K One's actual registrations; fill them in here
- * and they appear in the footer and structured data automatically. Empty
- * strings render nothing, so this can ship ahead of the data.
+ * B2B, taken from the K One company profile (Aug 2026). Empty values render
+ * nothing. PAN/TAN and banking details are deliberately NOT published here:
+ * they belong in the controlled-distribution company profile, not on a public
+ * site where they aid payment-fraud impersonation.
  */
 export const REGISTRATION: { label: string; value: string }[] = [
-  { label: 'LLPIN', value: '' }, // LLP identification number, e.g. 'ACx-xxxx'
-  { label: 'GSTIN', value: '' }, // 15-character GST number
-  { label: 'IEC', value: '' },   // Import Export Code, if import ops are active
+  { label: 'LLPIN', value: 'ACZ-7623' },
+  { label: 'GSTIN', value: '36ABFFK9349C1Z6' },
+  { label: 'Udyam (MSME)', value: 'UDYAM-TS-09-0265617' },
+  { label: 'IEC', value: '' }, // pending — fill in once import registration is issued
 ].filter((r) => r.value !== '');
 
 export const ORGANIZATION = {
   '@type': 'Organization',
   name: SITE_NAME,
+  legalName: SITE_NAME,
   url: SITE_URL,
   logo: `${SITE_URL}/assets/logo.png`,
   sameAs: ['https://www.linkedin.com/company/k-one-minerals-natural-resources-llp/'],
   telephone: '+917780780999',
   email: 'contact@k1mnr.com',
+  foundingDate: '2026-07-04',
+  taxID: '36ABFFK9349C1Z6',
+  founder: [
+    { '@type': 'Person', name: 'Trishneeth Korivi', jobTitle: 'Managing Partner & Designated Partner' },
+    { '@type': 'Person', name: 'Kurre Rupadevi', jobTitle: 'Designated Partner' },
+  ],
+  employee: [
+    { '@type': 'Person', name: 'Phani Srinivas Reddy Kurre', jobTitle: 'Chief Executive Officer' },
+  ],
   address: {
     '@type': 'PostalAddress',
     streetAddress:
-      'Plot No. 3-225, Divya Diamonds, Sterling Heights, Kavuri Hills Road, Madhapur',
+      '2nd Floor, 3-225, Divya Diamonds, Sterling Heights, Kavuri Hills Road, Madhapur',
     addressLocality: 'Hyderabad',
     addressRegion: 'Telangana',
-    postalCode: '500033',
+    postalCode: '500081',
     addressCountry: 'IN',
   },
   location: {
