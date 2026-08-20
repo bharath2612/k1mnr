@@ -95,8 +95,7 @@ body::before{
   border-bottom:1px solid transparent;
 }
 .nav.scrolled{
-  background:rgba(18,33,27,.93);
-  backdrop-filter:blur(14px);-webkit-backdrop-filter:blur(14px);
+  background:rgba(18,33,27,.97);
   padding:14px 0;border-bottom-color:var(--line-dark);
 }
 .nav-inner{display:flex;align-items:center;justify-content:space-between;gap:24px}
