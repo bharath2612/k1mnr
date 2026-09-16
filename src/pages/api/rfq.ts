@@ -142,7 +142,7 @@ async function notify(row: Record<string, unknown>, id: string): Promise<void> {
   if (!RESEND_API_KEY) return;
 
   const to = ORGANIZATION.email;
-  const from = `K One Minerals <rfq@k1mnr.com>`;
+  const from = `K One Minerals <connect@k1mnr.com>`;
 
   const lines = Object.entries(row)
     .filter(([k, v]) => v != null && k !== 'ip_hash' && k !== 'user_agent')
