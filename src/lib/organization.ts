@@ -30,7 +30,7 @@ export const ORGANIZATION = {
   logo: `${SITE_URL}/assets/logo.png`,
   sameAs: ['https://www.linkedin.com/company/k-one-minerals-natural-resources-llp/'],
   telephone: '+917780780999',
-  email: 'contact@k1mnr.com',
+  email: 'connect@k1mnr.com',
   foundingDate: '2026-07-04',
   taxID: '36ABFFK9349C1Z6',
   employee: [
